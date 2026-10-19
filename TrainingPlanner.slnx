@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="TrainingPlanner.Api/TrainingPlanner.Api.csproj" />
+  <Project Path="TrainingPlanner.Application/TrainingPlanner.Application.csproj" />
+  <Project Path="TrainingPlanner.Domain/TrainingPlanner.Domain.csproj" />
+  <Project Path="TrainingPlanner.Infrastructure/TrainingPlanner.Infrastructure.csproj" />
+</Solution>

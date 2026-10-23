@@ -1,0 +1,56 @@
+<main class="mx-auto min-h-screen max-w-5xl flex items-center justify-center p-6">
+    <section hlmCard class="w-full max-w-md space-y-3 p-8">
+        <header>
+            <h1 class="text-2xl font-bold">Registrace</h1>
+        </header>
+
+        @if (error(); as message) {
+        <p role="alert" class="text-sm text-destructive">{{ message }}</p>
+        }
+
+        <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div class="space-y-2">
+                    <label hlmLabel for="first-name">Jméno</label>
+                    <input hlmInput id="first-name" formControlName="firstName" autocomplete="given-name" />
+                </div>
+                <div class="space-y-2">
+                    <label hlmLabel for="last-name">Příjmení</label>
+                    <input hlmInput id="last-name" formControlName="lastName" autocomplete="family-name" />
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label hlmLabel for="register-email">Email</label>
+                <input hlmInput id="register-email" type="email" formControlName="email" autocomplete="email" />
+            </div>
+
+            <div class="space-y-2">
+                <label hlmLabel for="register-password">Heslo</label>
+                <input hlmInput id="register-password" type="password" formControlName="password"
+                    autocomplete="new-password" />
+                @if (form.controls.password.touched && form.controls.password.invalid) {
+                <p class="text-sm text-destructive">Heslo musí mít alespoň 8 znaků.</p>
+                }
+            </div>
+
+            <div class="space-y-2">
+                <label hlmLabel for="confirm-password">Potvrzení hesla</label>
+                <input hlmInput id="confirm-password" type="password" formControlName="confirmPassword"
+                    autocomplete="new-password" />
+                @if (form.controls.confirmPassword.touched && form.hasError('passwordsMismatch')) {
+                <p class="text-sm text-destructive">Hesla se neshodují.</p>
+                }
+            </div>
+
+            <button hlmBtn class="w-full cursor-pointer" type="submit" [disabled]="submitting()">
+                {{ submitting() ? 'Vytvářím účet…' : 'Zaregistrovat se' }}
+            </button>
+        </form>
+
+        <p class="text-sm text-center text-muted-foreground">
+            Už máte účet?
+            <a class="underline" routerLink="/login">Přihlaste se</a>
+        </p>
+    </section>
+</main>

@@ -1,0 +1,28 @@
+<main class="mx-auto flex min-h-screen max-w-5xl p-6">
+    <section class="flex flex-col w-full p-6">
+        <div class="flex items-center justify-between gap-4 mb-4">
+            <h1 class="text-3xl font-bold">Dashboard</h1>
+            <a hlmBtn routerLink="/create-workout">Vytvořit trénink</a>
+        </div>
+
+
+        <p *ngIf="loadError()" role="alert" class="mb-4 text-sm text-destructive">
+            {{ loadError() }}
+        </p>
+
+        <p *ngIf="isLoading()" class="mb-4 text-sm text-muted-foreground">
+            Načítám tréninky...
+        </p>
+
+        <p *ngIf="!isLoading() && !loadError() && workouts().length === 0" class="mb-4 text-sm text-muted-foreground">
+            Zatím nemáte žádné tréninky.
+        </p>
+
+        <div class="grid gap-3">
+            <section hlmCard *ngFor="let w of workouts()" class="p-4">
+                <h2 class="text-lg font-medium">{{ w.name }}</h2>
+                <p class="text-sm text-muted-foreground">{{ w.date | date : 'short' }}</p>
+            </section>
+        </div>
+    </section>
+</main>

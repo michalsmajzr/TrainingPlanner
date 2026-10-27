@@ -9,6 +9,7 @@ obj/
 node_modules/
 dist/
 .angular/
+certs/
 
 # Docker
 .env

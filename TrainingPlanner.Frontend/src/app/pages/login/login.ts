@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { toast } from '@spartan-ng/brain/sonner';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmCardImports } from '@spartan-ng/helm/card';
@@ -14,6 +15,7 @@ import { AuthApiService } from '../../auth/auth-api.service';
   imports: [
     ReactiveFormsModule,
     RouterLink,
+    TranslatePipe,
     ...HlmButtonImports,
     ...HlmCardImports,
     ...HlmInputImports,
@@ -25,6 +27,7 @@ export class LoginPage {
   private readonly fb = inject(FormBuilder);
   private readonly authApi = inject(AuthApiService);
   private readonly router = inject(Router);
+  private readonly translate = inject(TranslateService);
 
   readonly submitting = signal(false);
   readonly error = signal<string | null>(null);
@@ -48,12 +51,12 @@ export class LoginPage {
       .pipe(finalize(() => this.submitting.set(false)))
       .subscribe({
         next: () => {
-          toast('Přihlášení bylo úspěšné.');
+          toast(this.translate.instant('AUTH.LOGIN.SUCCESS'));
           void this.router.navigateByUrl('/dashboard');
         },
         error: (error: unknown) =>
           this.error.set(
-            this.authApi.errorMessage(error, 'Přihlášení se nezdařilo.'),
+            this.authApi.errorMessage(error, this.translate.instant('ERRORS.AUTH.LOGIN_FAILED')),
           ),
       });
   }

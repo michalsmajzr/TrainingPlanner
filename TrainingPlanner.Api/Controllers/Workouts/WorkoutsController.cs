@@ -5,14 +5,13 @@ using TrainingPlanner.Application.Workouts.Queries;
 
 namespace TrainingPlanner.Api.Controllers.Workouts;
 
-[ApiController]
 [Route("api/workouts")]
 public sealed class WorkoutsController(
     ICommandHandler<CreateWorkoutCommand, Guid> createWorkoutHandler,
     ICommandHandler<DeleteWorkoutCommand, bool> deleteWorkoutHandler,
     IQueryHandler<GetAllWorkoutsQuery, IReadOnlyList<WorkoutListItemDto>> getAllWorkoutsHandler,
     IQueryHandler<GetWorkoutByIdQuery, WorkoutDto?> getWorkoutByIdHandler)
-    : ControllerBase
+    : ApiControllerBase
 {
     // POST api/workouts
     [HttpPost]
@@ -23,7 +22,11 @@ public sealed class WorkoutsController(
 
         if (result.IsFailure)
         {
-            return BadRequest(new { result.Error.Code, result.Error.Description });
+            return ProblemResponse(
+                statusCode: StatusCodes.Status400BadRequest,
+                errorCode: result.Error.Code,
+                detail: result.Error.Description,
+                title: "Bad Request");
         }
 
         return Ok(new CreateWorkoutResponse(result.Value));
@@ -42,7 +45,16 @@ public sealed class WorkoutsController(
     public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
     {
         var workout = await getWorkoutByIdHandler.Handle(new GetWorkoutByIdQuery(id), cancellationToken);
-        return workout is null ? NotFound() : Ok(workout);
+
+        if (workout is null)
+        {
+            return ProblemResponse(
+                statusCode: StatusCodes.Status404NotFound,
+                errorCode: "workout.not_found",
+                title: "Not Found");
+        }
+
+        return Ok(workout);
     }
 
     // DELETE api/workouts/{id}
@@ -50,7 +62,17 @@ public sealed class WorkoutsController(
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
         var result = await deleteWorkoutHandler.Handle(new DeleteWorkoutCommand(id), cancellationToken);
-        return result.IsFailure ? NotFound(new { result.Error.Code, result.Error.Description }) : NoContent();
+
+        if (result.IsFailure)
+        {
+            return ProblemResponse(
+                statusCode: StatusCodes.Status404NotFound,
+                errorCode: result.Error.Code,
+                detail: result.Error.Description,
+                title: "Not Found");
+        }
+
+        return NoContent();
     }
 }
 

@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
 import { finalize, switchMap } from 'rxjs';
+import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { toast } from '@spartan-ng/brain/sonner';
 import { HlmAlertDialogImports } from '@spartan-ng/helm/alert-dialog';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmCardImports } from '@spartan-ng/helm/card';
+import { LanguageSwitcherComponent } from '@components/language-switcher';
 
 type WorkoutListItem = {
   id: string;
@@ -14,13 +16,31 @@ type WorkoutListItem = {
   date: string;
 };
 
+type ApiErrorResponse = {
+  statusCode: number;
+  errorCode: string;
+  title: string;
+  detail?: string;
+};
+
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, RouterLink, HlmButtonImports, HlmCardImports, HlmAlertDialogImports],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    TranslatePipe,
+    HlmButtonImports,
+    HlmCardImports,
+    HlmAlertDialogImports,
+    LanguageSwitcherComponent
+  ],
   templateUrl: './dashboard.html',
 })
 export class DashboardPage implements OnInit {
   private readonly http = inject(HttpClient);
+  private readonly translate = inject(TranslateService);
+
   readonly workouts = signal<WorkoutListItem[]>([]);
   readonly loadError = signal<string | null>(null);
   readonly isLoading = signal(false);
@@ -43,9 +63,10 @@ export class DashboardPage implements OnInit {
         next: (data) => {
           this.workouts.set(Array.isArray(data) ? data : []);
         },
-        error: (error) => {
-          this.loadError.set('Tréninky se nepodařilo načíst. Zkuste to prosím znovu.');
-          console.error('Nepodařilo se načíst tréninky:', error);
+        error: (error: HttpErrorResponse) => {
+          const message = this.getErrorMessage(error, 'ERRORS.WORKOUTS.LOAD_FAILED');
+          this.loadError.set(message);
+          console.error(error);
         },
       });
   }
@@ -69,12 +90,28 @@ export class DashboardPage implements OnInit {
       .subscribe({
         next: () => {
           this.workouts.update((workouts) => workouts.filter((w) => w.id !== id));
-          toast.success('Trénink byl úspěšně smazán.');
+          toast.success(this.translate.instant('WORKOUTS.DELETE_SUCCESS'));
         },
-        error: (error) => {
-          toast.error('Trénink se nepodařilo smazat. Zkuste to prosím znovu.');
-          console.error('Nepodařilo se smazat trénink:', error);
+        error: (error: HttpErrorResponse) => {
+          const errorMessage = this.getErrorMessage(error, 'ERRORS.WORKOUTS.DELETE_FAILED');
+          toast.error(errorMessage);
+          console.error(error);
         },
       });
+  }
+
+  private getErrorMessage(error: HttpErrorResponse, fallbackKey: string): string {
+    const apiError = error.error as ApiErrorResponse | undefined;
+
+    if (apiError?.errorCode) {
+      const translationKey = `ERRORS.${apiError.errorCode}`;
+      const translated = this.translate.instant(translationKey);
+      
+      if (translated !== translationKey) {
+        return translated;
+      }
+    }
+
+    return this.translate.instant(fallbackKey);
   }
 }

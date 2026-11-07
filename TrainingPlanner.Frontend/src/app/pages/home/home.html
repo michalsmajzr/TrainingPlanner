@@ -1,19 +1,22 @@
 <main class="mx-auto flex min-h-screen max-w-5xl items-center justify-center p-6">
     <section hlmCard class="w-full max-w-xl space-y-3 p-8 text-center">
+        <app-language-switcher />
         <div>
             <p class="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
                 TrainingPlanner
             </p>
-            <h1 class="mt-3 text-3xl font-bold">Plánuj svůj trénink</h1>
+            <h1 class="mt-3 text-3xl font-bold">
+                {{ 'HOME.HEADING' | translate }}
+            </h1>
             <p class="mt-3 text-muted-foreground">
-                Přihlaste se ke svému účtu, nebo si vytvořte nový.
+                {{ 'HOME.DESCRIPTION' | translate }}
             </p>
         </div>
 
         <div class="flex flex-wrap justify-center gap-3">
-            <a hlmBtn routerLink="/login">Přihlásit se</a>
+            <a hlmBtn routerLink="/login">{{ 'HOME.LOGIN' | translate }}</a>
             <a hlmBtn [variant]="'outline'" routerLink="/register">
-                Vytvořit účet
+                {{ 'HOME.REGISTER' | translate }}
             </a>
         </div>
     </section>

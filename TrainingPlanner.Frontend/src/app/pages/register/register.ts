@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { toast } from '@spartan-ng/brain/sonner';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmCardImports } from '@spartan-ng/helm/card';
@@ -19,6 +20,7 @@ import { AuthApiService } from '../../auth/auth-api.service';
   imports: [
     ReactiveFormsModule,
     RouterLink,
+    TranslatePipe,
     ...HlmButtonImports,
     ...HlmCardImports,
     ...HlmInputImports,
@@ -30,6 +32,7 @@ export class RegisterPage {
   private readonly fb = inject(FormBuilder);
   private readonly authApi = inject(AuthApiService);
   private readonly router = inject(Router);
+  private readonly translate = inject(TranslateService);
 
   readonly submitting = signal(false);
   readonly error = signal<string | null>(null);
@@ -66,12 +69,12 @@ export class RegisterPage {
       .pipe(finalize(() => this.submitting.set(false)))
       .subscribe({
         next: () => {
-          toast('Registrace byla úspěšná.');
+          toast(this.translate.instant('AUTH.REGISTER.SUCCESS'));
           void this.router.navigateByUrl('/');
         },
         error: (error: unknown) =>
           this.error.set(
-            this.authApi.errorMessage(error, 'Registrace se nezdařila.'),
+            this.authApi.errorMessage(error, this.translate.instant('ERRORS.AUTH.REGISTER_FAILED')),
           ),
       });
   }

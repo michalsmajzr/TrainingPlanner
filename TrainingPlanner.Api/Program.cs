@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.RateLimiting;
 using TrainingPlanner.Application.Abstractions;
@@ -159,11 +160,15 @@ app.Use(async (context, next) =>
     {
         app.Logger.LogWarning(ex, "CSRF validation failed for {Method} {Path}", context.Request.Method, context.Request.Path);
         context.Response.StatusCode = StatusCodes.Status400BadRequest;
-        await context.Response.WriteAsJsonAsync(new
+
+        var problemDetails = new ProblemDetails
         {
-            code = "csrf_validation_failed",
-            description = "Missing or invalid CSRF token/cookie pair."
-        });
+            Status = StatusCodes.Status400BadRequest,
+            Title = "Bad Request"
+        };
+        problemDetails.Extensions["errorCode"] = "csrf.validation_failed";
+
+        await context.Response.WriteAsJsonAsync(problemDetails);
         return;
     }
 

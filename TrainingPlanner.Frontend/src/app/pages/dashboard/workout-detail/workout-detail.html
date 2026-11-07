@@ -3,7 +3,7 @@
         <div class="mb-4">
             <button hlmBtn variant="outline" routerLink="/dashboard" class="cursor-pointer">
                 <ng-icon data-icon="inline-start" name="lucideArrowLeft" />
-                <span>Zpět na dashboard</span>
+                <span>{{ 'WORKOUTS.BACK_TO_DASHBOARD' | translate }}</span>
             </button>
         </div>
 
@@ -12,7 +12,7 @@
         }
 
         @if (isLoading()) {
-        <p class="mb-4 text-sm text-muted-foreground">Načítám trénink...</p>
+        <p class="mb-4 text-sm text-muted-foreground">{{ 'WORKOUTS.LOADING_DETAIL' | translate }}</p>
         }
 
         @if (workout(); as w) {

@@ -9,10 +9,11 @@ import { HlmInputImports } from '@spartan-ng/helm/input';
 import { HlmLabelImports } from '@spartan-ng/helm/label';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideArrowLeft } from '@ng-icons/lucide';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-create-workout',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, NgIcon, HlmButtonImports, HlmInputImports, HlmLabelImports],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, NgIcon, HlmButtonImports, HlmInputImports, HlmLabelImports, TranslatePipe],
   providers: [
     provideIcons({
       lucideArrowLeft,
@@ -24,6 +25,7 @@ export class CreateWorkoutPage {
   private readonly http = inject(HttpClient);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly translate = inject(TranslateService);
 
   form = this.fb.group({
     name: ['', [Validators.required, Validators.maxLength(100)]],
@@ -50,7 +52,7 @@ export class CreateWorkoutPage {
             headers: new HttpHeaders({ 'X-CSRF-TOKEN': csrf.requestToken }),
           })
           .subscribe(() => {
-            toast.success('Trénink byl úspěšně vytvořen.');
+            toast.success(this.translate.instant('WORKOUTS.CREATE_SUCCESS'));
             this.router.navigateByUrl('/dashboard');
           });
       });

@@ -6,6 +6,7 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmCardImports } from '@spartan-ng/helm/card';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideArrowLeft } from '@ng-icons/lucide';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 type WorkoutDetail = {
   id: string;
@@ -14,7 +15,7 @@ type WorkoutDetail = {
 
 @Component({
   selector: 'app-workout-detail',
-  imports: [RouterLink, HlmButtonImports, HlmCardImports, NgIcon],
+  imports: [RouterLink, HlmButtonImports, HlmCardImports, NgIcon, TranslatePipe],
   providers: [
     provideIcons({
       lucideArrowLeft,
@@ -26,6 +27,7 @@ type WorkoutDetail = {
 export class WorkoutDetailPage implements OnInit {
   private readonly http = inject(HttpClient);
   private readonly route = inject(ActivatedRoute);
+  private readonly translate = inject(TranslateService);
 
   readonly workout = signal<WorkoutDetail | null>(null);
   readonly loadError = signal<string | null>(null);
@@ -54,11 +56,13 @@ export class WorkoutDetailPage implements OnInit {
         next: (data) => this.workout.set(data),
         error: (error) => {
           this.loadError.set(
-            error?.status === 404
-              ? 'Trénink nebyl nalezen.'
-              : 'Trénink se nepodařilo načíst. Zkuste to prosím znovu.',
+            this.translate.instant(
+              error?.status === 404
+                ? 'ERRORS.WORKOUTS.NOT_FOUND'
+                : 'ERRORS.WORKOUTS.DETAIL_LOAD_FAILED',
+            ),
           );
-          console.error('Nepodařilo se načíst trénink:', error);
+          console.error('Failed to load workout:', error);
         },
       });
   }

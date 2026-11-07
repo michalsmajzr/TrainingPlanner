@@ -3,25 +3,25 @@
         <div class="mb-4">
             <button hlmBtn variant="outline" routerLink="/dashboard" class="cursor-pointer">
                 <ng-icon data-icon="inline-start" name="lucideArrowLeft" />
-                <span>Zpět na dashboard</span>
+                <span>{{ 'WORKOUTS.BACK_TO_DASHBOARD' | translate }}</span>
             </button>
         </div>
-        <h1 class="text-2xl font-semibold mb-4">Create workout</h1>
+                        <h1 class="text-2xl font-semibold mb-4">{{ 'WORKOUTS.CREATE.TITLE' | translate }}</h1>
 
         <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
             <div class="space-y-2">
-                <label hlmLabel for="workout-name">Workout name</label>
+                <label hlmLabel                 for="workout-name">{{ 'WORKOUTS.CREATE.NAME_LABEL' | translate }}</label>
                 <input hlmInput id="workout-name" name="name" type="text" formControlName="name"
-                    placeholder="Upper lower" />
+                                    [placeholder]="'WORKOUTS.CREATE.NAME_PLACEHOLDER' | translate" />
                 @if (form.controls.name.touched && form.controls.name.errors?.['required']) {
-                <p class="text-xs text-destructive">Toto pole je nutné vyplnit.</p>
+                                <p class="text-xs text-destructive">{{ 'WORKOUTS.CREATE.NAME_REQUIRED' | translate }}</p>
                 }
                 @if (form.controls.name.touched && form.controls.name.errors?.['maxlength']) {
-                <p class="text-xs text-destructive">Maximální délka je 100 znaků.</p>
+                                <p class="text-xs text-destructive">{{ 'WORKOUTS.CREATE.NAME_MAX_LENGTH' | translate }}</p>
                 }
             </div>
 
-            <button hlmBtn class="px-6" type="submit">Save</button>
+                            <button hlmBtn type="submit" class="px-6 cursor-pointer">{{ 'BUTTONS.SAVE' | translate }}</button>
         </form>
     </section>
 </main>

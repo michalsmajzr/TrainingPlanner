@@ -1,7 +1,7 @@
 <main class="mx-auto min-h-screen max-w-5xl flex items-center justify-center p-6">
     <section hlmCard class="w-full max-w-md space-y-3 p-8">
         <header>
-            <h1 class="text-2xl font-bold">Přihlášení</h1>
+            <h1 class="text-2xl font-bold">{{ 'AUTH.LOGIN.TITLE' | translate }}</h1>
         </header>
 
         @if (error(); as message) {
@@ -10,30 +10,30 @@
 
         <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-5">
             <div class="space-y-2">
-                <label hlmLabel for="login-email">Email</label>
+                <label hlmLabel for="login-email">{{ 'AUTH.EMAIL' | translate }}</label>
                 <input hlmInput id="login-email" type="email" formControlName="email" autocomplete="email" />
                 @if (form.controls.email.touched && form.controls.email.invalid) {
-                <p class="text-sm text-destructive">Zadej platný email.</p>
+                <p class="text-sm text-destructive">{{ 'AUTH.LOGIN.EMAIL_INVALID' | translate }}</p>
                 }
             </div>
 
             <div class="space-y-2">
-                <label hlmLabel for="login-password">Heslo</label>
+                <label hlmLabel for="login-password">{{ 'AUTH.PASSWORD' | translate }}</label>
                 <input hlmInput id="login-password" type="password" formControlName="password"
                     autocomplete="current-password" />
                 @if (form.controls.password.touched && form.controls.password.invalid) {
-                <p class="text-sm text-destructive">Zadej heslo.</p>
+                <p class="text-sm text-destructive">{{ 'AUTH.LOGIN.PASSWORD_REQUIRED' | translate }}</p>
                 }
             </div>
 
             <button hlmBtn class="w-full cursor-pointer" type="submit" [disabled]="submitting()">
-                {{ submitting() ? 'Přihlašuji…' : 'Přihlásit se' }}
+                {{ (submitting() ? 'AUTH.LOGIN.SUBMITTING' : 'AUTH.LOGIN.SUBMIT') | translate }}
             </button>
         </form>
 
         <p class="text-sm text-center text-muted-foreground">
-            Nemáte účet?
-            <a class="underline" routerLink="/register">Zaregistrujte se</a>
+            {{ 'AUTH.LOGIN.NO_ACCOUNT' | translate }}
+            <a class="underline" routerLink="/register">{{ 'AUTH.LOGIN.REGISTER_LINK' | translate }}</a>
         </p>
     </section>
 </main>

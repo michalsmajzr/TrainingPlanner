@@ -9,32 +9,18 @@ using TrainingPlanner.Application.Auth.Commands;
 
 namespace TrainingPlanner.Api.Controllers;
 
-[ApiController]
 [Route("api/auth")]
-public sealed class AuthController : ControllerBase
+public sealed class AuthController(
+    ICommandHandler<RegisterUserCommand, AuthUser> registerHandler,
+    ICommandHandler<LoginUserCommand, AuthUser> loginHandler,
+    IIdentityService identityService,
+    IAntiforgery antiforgery) : ApiControllerBase
 {
-    private readonly ICommandHandler<RegisterUserCommand, AuthUser> _registerHandler;
-    private readonly ICommandHandler<LoginUserCommand, AuthUser> _loginHandler;
-    private readonly IIdentityService _identityService;
-    private readonly IAntiforgery _antiforgery;
-
-    public AuthController(
-        ICommandHandler<RegisterUserCommand, AuthUser> registerHandler,
-        ICommandHandler<LoginUserCommand, AuthUser> loginHandler,
-        IIdentityService identityService,
-        IAntiforgery antiforgery)
-    {
-        _registerHandler = registerHandler;
-        _loginHandler = loginHandler;
-        _identityService = identityService;
-        _antiforgery = antiforgery;
-    }
-
     [AllowAnonymous]
     [HttpGet("csrf")]
     public IActionResult GetCsrfToken()
     {
-        var tokens = _antiforgery.GetAndStoreTokens(HttpContext);
+        var tokens = antiforgery.GetAndStoreTokens(HttpContext);
         return Ok(new { requestToken = tokens.RequestToken });
     }
 
@@ -49,10 +35,15 @@ public sealed class AuthController : ControllerBase
             request.FirstName,
             request.LastName);
 
-        Result<AuthUser> result = await _registerHandler.Handle(command, cancellationToken);
+        Result<AuthUser> result = await registerHandler.Handle(command, cancellationToken);
+
         if (result.IsFailure)
         {
-            return BadRequest(new { result.Error.Code, result.Error.Description });
+            return ProblemResponse(
+                statusCode: StatusCodes.Status400BadRequest,
+                errorCode: result.Error.Code,
+                detail: result.Error.Description,
+                title: "Bad Request");
         }
 
         return Ok(result.Value);
@@ -64,10 +55,15 @@ public sealed class AuthController : ControllerBase
     public async Task<IActionResult> Login(LoginRequest request, CancellationToken cancellationToken)
     {
         var command = new LoginUserCommand(request.Email, request.Password);
-        Result<AuthUser> result = await _loginHandler.Handle(command, cancellationToken);
+        Result<AuthUser> result = await loginHandler.Handle(command, cancellationToken);
+
         if (result.IsFailure)
         {
-            return Unauthorized(new { result.Error.Code, result.Error.Description });
+            return ProblemResponse(
+                statusCode: StatusCodes.Status401Unauthorized,
+                errorCode: result.Error.Code,
+                detail: result.Error.Description,
+                title: "Unauthorized");
         }
 
         return Ok(result.Value);
@@ -77,7 +73,7 @@ public sealed class AuthController : ControllerBase
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
-        await _identityService.SignOutAsync();
+        await identityService.SignOutAsync();
         return NoContent();
     }
 
@@ -85,8 +81,17 @@ public sealed class AuthController : ControllerBase
     [HttpGet("me")]
     public async Task<IActionResult> GetCurrentUser()
     {
-        AuthUser? user = await _identityService.GetCurrentUserAsync(User);
-        return user is null ? Unauthorized() : Ok(user);
+        AuthUser? user = await identityService.GetCurrentUserAsync(User);
+
+        if (user is null)
+        {
+            return ProblemResponse(
+                statusCode: StatusCodes.Status401Unauthorized,
+                errorCode: "auth.unauthorized",
+                title: "Unauthorized");
+        }
+
+        return Ok(user);
     }
 }
 

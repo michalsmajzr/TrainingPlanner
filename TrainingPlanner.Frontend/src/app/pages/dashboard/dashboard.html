@@ -1,27 +1,27 @@
 <main class="mx-auto flex min-h-screen max-w-5xl p-6">
     <section class="flex flex-col w-full p-6">
+        <app-language-switcher />
         <div class="flex items-center justify-between gap-4 mb-4">
-            <h1 class="text-3xl font-bold">Dashboard</h1>
-            <a hlmBtn routerLink="/create-workout">Vytvořit trénink</a>
+            <h1 class="text-3xl font-bold">{{ 'DASHBOARD.TITLE' | translate }}</h1>
+            <a hlmBtn routerLink="/create-workout">{{ 'DASHBOARD.CREATE_WORKOUT' | translate }}</a>
         </div>
-
 
         <p *ngIf="loadError()" role="alert" class="mb-4 text-sm text-destructive">
             {{ loadError() }}
         </p>
 
         <p *ngIf="isLoading()" class="mb-4 text-sm text-muted-foreground">
-            Načítám tréninky...
+            {{ 'DASHBOARD.LOADING' | translate }}
         </p>
 
         <p *ngIf="!isLoading() && !loadError() && workouts().length === 0" class="mb-4 text-sm text-muted-foreground">
-            Zatím nemáte žádné tréninky.
+            {{ 'DASHBOARD.EMPTY' | translate }}
         </p>
 
         <div class="grid gap-3">
             <div hlmCard *ngFor="let w of workouts()" class="relative p-4 transition-colors hover:bg-accent">
                 <a [routerLink]="['/dashboard', w.id]" class="absolute inset-0 rounded-[inherit]">
-                    <span class="sr-only">Přejít na trénink {{ w.name }}</span>
+                    <span class="sr-only">{{ 'DASHBOARD.GO_TO' | translate }} {{ w.name }}</span>
                 </a>
 
                 <div class="flex items-center justify-between w-full">
@@ -34,20 +34,22 @@
                         <hlm-alert-dialog [closeOnOutsidePointerEvents]="true">
                             <button hlmAlertDialogTrigger hlmBtn variant="destructive" size="sm" class="cursor-pointer"
                                 [disabled]="deletingWorkoutId() === w.id">
-                                Smazat
+                                {{ 'BUTTONS.DELETE' | translate }}
                             </button>
                             <hlm-alert-dialog-content *hlmAlertDialogPortal="let ctx">
                                 <hlm-alert-dialog-header>
-                                    <h2 hlmAlertDialogTitle>Opravdu chcete smazat tento trénink?</h2>
+                                    <h2 hlmAlertDialogTitle>{{ 'MODAL.DELETE_TITLE' | translate }}</h2>
                                     <p hlmAlertDialogDescription>
-                                        Tato akce je nevratná. Trénink &bdquo;{{ w.name }}&ldquo; bude trvale odstraněn.
+                                        {{ 'MODAL.DELETE_DESC' | translate: { name: w.name } }}
                                     </p>
                                 </hlm-alert-dialog-header>
                                 <hlm-alert-dialog-footer>
-                                    <button hlmAlertDialogCancel class="cursor-pointer">Zrušit</button>
+                                    <button hlmAlertDialogCancel class="cursor-pointer">
+                                        {{ 'BUTTONS.CANCEL' | translate }}
+                                    </button>
                                     <button hlmAlertDialogAction variant="destructive" class="cursor-pointer"
                                         (click)="deleteWorkout(w.id); ctx.close()">
-                                        Smazat
+                                        {{ 'BUTTONS.DELETE' | translate }}
                                     </button>
                                 </hlm-alert-dialog-footer>
                             </hlm-alert-dialog-content>

@@ -1,0 +1,79 @@
+{
+  "HOME": {
+    "HEADING": "Plánuj svůj trénink",
+    "DESCRIPTION": "Přihlaste se ke svému účtu, nebo si vytvořte nový.",
+    "LOGIN": "Přihlásit se",
+    "REGISTER": "Vytvořit účet"
+  },
+  "DASHBOARD": {
+    "TITLE": "Dashboard",
+    "CREATE_WORKOUT": "Vytvořit trénink",
+    "LOADING": "Načítám tréninky...",
+    "EMPTY": "Zatím nemáte žádné tréninky.",
+    "GO_TO": "Přejít na trénink"
+  },
+  "WORKOUTS": {
+    "DELETE_SUCCESS": "Trénink byl úspěšně smazán.",
+    "LOADING_DETAIL": "Načítám trénink...",
+    "BACK_TO_DASHBOARD": "Zpět na dashboard",
+    "CREATE_SUCCESS": "Trénink byl úspěšně vytvořen.",
+    "CREATE": {
+      "TITLE": "Vytvořit trénink",
+      "NAME_LABEL": "Název tréninku",
+      "NAME_PLACEHOLDER": "Upper lower",
+      "NAME_REQUIRED": "Toto pole je nutné vyplnit.",
+      "NAME_MAX_LENGTH": "Maximální délka je 100 znaků."
+    }
+  },
+  "AUTH": {
+    "EMAIL": "Email",
+    "PASSWORD": "Heslo",
+    "LOGIN": {
+      "TITLE": "Přihlášení",
+      "SUBMIT": "Přihlásit se",
+      "SUBMITTING": "Přihlašuji…",
+      "SUCCESS": "Přihlášení bylo úspěšné.",
+      "EMAIL_INVALID": "Zadejte platný email.",
+      "PASSWORD_REQUIRED": "Zadejte heslo.",
+      "NO_ACCOUNT": "Nemáte účet?",
+      "REGISTER_LINK": "Zaregistrujte se"
+    },
+    "REGISTER": {
+      "TITLE": "Registrace",
+      "FIRST_NAME": "Jméno",
+      "LAST_NAME": "Příjmení",
+      "CONFIRM_PASSWORD": "Potvrzení hesla",
+      "SUBMIT": "Zaregistrovat se",
+      "SUBMITTING": "Vytvářím účet…",
+      "SUCCESS": "Registrace byla úspěšná.",
+      "PASSWORD_MIN_LENGTH": "Heslo musí mít alespoň 8 znaků.",
+      "PASSWORDS_MISMATCH": "Hesla se neshodují.",
+      "HAVE_ACCOUNT": "Už máte účet?",
+      "LOGIN_LINK": "Přihlaste se"
+    }
+  },
+  "BUTTONS": {
+    "DELETE": "Smazat",
+    "CANCEL": "Zrušit",
+    "SAVE": "Uložit"
+  },
+  "MODAL": {
+    "DELETE_TITLE": "Opravdu chcete smazat tento trénink?",
+    "DELETE_DESC": "Tato akce je nevratná. Trénink „{{ name }}“ bude trvale odstraněn."
+  },
+  "ERRORS": {
+    "workout": {
+      "not_found": "Požadovaný trénink nebyl nalezen."
+    },
+    "AUTH": {
+      "LOGIN_FAILED": "Přihlášení se nezdařilo.",
+      "REGISTER_FAILED": "Registrace se nezdařila."
+    },
+    "WORKOUTS": {
+      "NOT_FOUND": "Trénink nebyl nalezen.",
+      "DETAIL_LOAD_FAILED": "Trénink se nepodařilo načíst. Zkuste to prosím znovu.",
+      "LOAD_FAILED": "Tréninky se nepodařilo načíst. Zkuste to prosím znovu.",
+      "DELETE_FAILED": "Trénink se nepodařilo smazat. Zkuste to prosím znovu."
+    }
+  }
+}

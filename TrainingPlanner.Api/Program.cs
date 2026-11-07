@@ -5,12 +5,11 @@ using System.Threading.RateLimiting;
 using TrainingPlanner.Application.Abstractions;
 using TrainingPlanner.Application.Auth;
 using TrainingPlanner.Application.Auth.Commands;
-using TrainingPlanner.Application.Workouts;
 using TrainingPlanner.Application.Workouts.Commands;
+using TrainingPlanner.Application.Workouts.Queries;
 using TrainingPlanner.Infrastructure.Auth;
 using TrainingPlanner.Infrastructure.Identity;
 using TrainingPlanner.Infrastructure.Persistence;
-using TrainingPlanner.Infrastructure.Persistence.Workouts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,8 +80,11 @@ builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<ICommandHandler<RegisterUserCommand, AuthUser>, RegisterUserCommandHandler>();
 builder.Services.AddScoped<ICommandHandler<LoginUserCommand, AuthUser>, LoginUserCommandHandler>();
 // Register the workout repository and command handler for creating workouts.
-builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
+builder.Services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
 builder.Services.AddScoped<ICommandHandler<CreateWorkoutCommand, Guid>, CreateWorkoutCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<DeleteWorkoutCommand, bool>, DeleteWorkoutCommandHandler>();
+builder.Services.AddScoped<IQueryHandler<GetAllWorkoutsQuery, IReadOnlyList<WorkoutListItemDto>>, GetAllWorkoutsQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<GetWorkoutByIdQuery, WorkoutDto?>, GetWorkoutByIdQueryHandler>();
 
 // Configure CORS policy to allow requests from the Angular frontend.
 builder.Services.AddCors(options =>

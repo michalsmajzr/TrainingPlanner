@@ -1,7 +1,6 @@
-﻿namespace TrainingPlanner.Application.Abstractions
+﻿namespace TrainingPlanner.Application.Abstractions;
+
+public interface ICommandHandler<TCommand, TResult>
 {
-    public interface ICommandHandler<TCommand, TResult>
-    {
-        Task<Result<TResult>> Handle(TCommand command, CancellationToken cancellationToken);
-    }
+    Task<Result<TResult>> Handle(TCommand command, CancellationToken cancellationToken);
 }

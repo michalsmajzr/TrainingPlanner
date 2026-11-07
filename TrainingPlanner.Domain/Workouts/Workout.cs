@@ -1,5 +1,4 @@
-﻿
-namespace TrainingPlanner.Domain.Workouts;
+﻿namespace TrainingPlanner.Domain.Workouts;
 
 public class Workout
 {

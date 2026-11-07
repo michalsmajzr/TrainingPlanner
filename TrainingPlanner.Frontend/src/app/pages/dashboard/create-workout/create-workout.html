@@ -1,11 +1,27 @@
 <main class="mx-auto flex min-h-screen max-w-5xl p-6">
-    <section class="p-6">
+    <section class="p-6 w-full max-w-md">
+        <div class="mb-4">
+            <button hlmBtn variant="outline" routerLink="/dashboard" class="cursor-pointer">
+                <ng-icon data-icon="inline-start" name="lucideArrowLeft" />
+                <span>Zpět na dashboard</span>
+            </button>
+        </div>
         <h1 class="text-2xl font-semibold mb-4">Create workout</h1>
 
-        <form [formGroup]="form" (ngSubmit)="submit()" class="grid gap-3 max-w-md">
-            <input type="text" formControlName="name" placeholder="Workout name" />
-            <input type="datetime-local" formControlName="date" />
-            <button hlmBtn type="submit">Save</button>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-4">
+            <div class="space-y-2">
+                <label hlmLabel for="workout-name">Workout name</label>
+                <input hlmInput id="workout-name" name="name" type="text" formControlName="name"
+                    placeholder="Upper lower" />
+                @if (form.controls.name.touched && form.controls.name.errors?.['required']) {
+                <p class="text-xs text-destructive">Toto pole je nutné vyplnit.</p>
+                }
+                @if (form.controls.name.touched && form.controls.name.errors?.['maxlength']) {
+                <p class="text-xs text-destructive">Maximální délka je 100 znaků.</p>
+                }
+            </div>
+
+            <button hlmBtn class="px-6" type="submit">Save</button>
         </form>
     </section>
 </main>

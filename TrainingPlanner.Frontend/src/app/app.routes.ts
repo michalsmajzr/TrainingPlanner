@@ -4,6 +4,7 @@ import { LoginPage } from './pages/login/login';
 import { RegisterPage } from './pages/register/register';
 import { DashboardPage } from './pages/dashboard/dashboard';
 import { CreateWorkoutPage } from './pages/dashboard/create-workout/create-workout';
+import { WorkoutDetailPage } from './pages/dashboard/workout-detail/workout-detail';
 
 export const routes: Routes = [
   { path: '', component: HomePage, title: 'TrainingPlanner' },
@@ -11,5 +12,6 @@ export const routes: Routes = [
   { path: 'register', component: RegisterPage, title: 'Registrace' },
   { path: 'dashboard', component: DashboardPage, title: 'Dashboard' },
   { path: 'create-workout', component: CreateWorkoutPage, title: 'Vytvoření tréninku' },
+  { path: 'dashboard/:id', component: WorkoutDetailPage, title: 'Trénink' },
   { path: '**', redirectTo: '' },
 ];

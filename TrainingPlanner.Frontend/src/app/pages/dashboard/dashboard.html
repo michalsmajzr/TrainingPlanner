@@ -19,10 +19,42 @@
         </p>
 
         <div class="grid gap-3">
-            <section hlmCard *ngFor="let w of workouts()" class="p-4">
-                <h2 class="text-lg font-medium">{{ w.name }}</h2>
-                <p class="text-sm text-muted-foreground">{{ w.date | date : 'short' }}</p>
-            </section>
+            <div hlmCard *ngFor="let w of workouts()" class="relative p-4 transition-colors hover:bg-accent">
+                <a [routerLink]="['/dashboard', w.id]" class="absolute inset-0 rounded-[inherit]">
+                    <span class="sr-only">Přejít na trénink {{ w.name }}</span>
+                </a>
+
+                <div class="flex items-center justify-between w-full">
+                    <div class="pointer-events-none">
+                        <h2 class="text-lg font-medium">{{ w.name }}</h2>
+                        <p class="text-sm text-muted-foreground">{{ w.date | date : 'short' }}</p>
+                    </div>
+
+                    <div class="relative z-10">
+                        <hlm-alert-dialog [closeOnOutsidePointerEvents]="true">
+                            <button hlmAlertDialogTrigger hlmBtn variant="destructive" size="sm" class="cursor-pointer"
+                                [disabled]="deletingWorkoutId() === w.id">
+                                Smazat
+                            </button>
+                            <hlm-alert-dialog-content *hlmAlertDialogPortal="let ctx">
+                                <hlm-alert-dialog-header>
+                                    <h2 hlmAlertDialogTitle>Opravdu chcete smazat tento trénink?</h2>
+                                    <p hlmAlertDialogDescription>
+                                        Tato akce je nevratná. Trénink &bdquo;{{ w.name }}&ldquo; bude trvale odstraněn.
+                                    </p>
+                                </hlm-alert-dialog-header>
+                                <hlm-alert-dialog-footer>
+                                    <button hlmAlertDialogCancel class="cursor-pointer">Zrušit</button>
+                                    <button hlmAlertDialogAction variant="destructive" class="cursor-pointer"
+                                        (click)="deleteWorkout(w.id); ctx.close()">
+                                        Smazat
+                                    </button>
+                                </hlm-alert-dialog-footer>
+                            </hlm-alert-dialog-content>
+                        </hlm-alert-dialog>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </main>

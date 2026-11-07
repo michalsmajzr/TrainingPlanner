@@ -1,31 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 using TrainingPlanner.Application.Abstractions;
-using TrainingPlanner.Application.Workouts;
 using TrainingPlanner.Application.Workouts.Commands;
+using TrainingPlanner.Application.Workouts.Queries;
 
 namespace TrainingPlanner.Api.Controllers.Workouts;
 
 [ApiController]
 [Route("api/workouts")]
-public sealed class WorkoutsController : ControllerBase
+public sealed class WorkoutsController(
+    ICommandHandler<CreateWorkoutCommand, Guid> createWorkoutHandler,
+    ICommandHandler<DeleteWorkoutCommand, bool> deleteWorkoutHandler,
+    IQueryHandler<GetAllWorkoutsQuery, IReadOnlyList<WorkoutListItemDto>> getAllWorkoutsHandler,
+    IQueryHandler<GetWorkoutByIdQuery, WorkoutDto?> getWorkoutByIdHandler)
+    : ControllerBase
 {
-    private readonly ICommandHandler<CreateWorkoutCommand, Guid> _createWorkoutHandler;
-    private readonly IWorkoutRepository _workoutRepository;
-
-    // Inject the command handler for creating workouts
-    public WorkoutsController(ICommandHandler<CreateWorkoutCommand, Guid> createWorkoutHandler, IWorkoutRepository workoutRepository)
-    {
-        _createWorkoutHandler = createWorkoutHandler;
-        _workoutRepository = workoutRepository;
-    }
-
     // POST api/workouts
     [HttpPost]
     public async Task<IActionResult> Create(CreateWorkoutRequest request, CancellationToken cancellationToken)
     {
-        var command = new CreateWorkoutCommand(request.Name, request.Date);
-        var result = await _createWorkoutHandler.Handle(command, cancellationToken);
+        var command = new CreateWorkoutCommand(request.Name);
+        var result = await createWorkoutHandler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
         {
@@ -35,21 +29,31 @@ public sealed class WorkoutsController : ControllerBase
         return Ok(new CreateWorkoutResponse(result.Value));
     }
 
+    // GET api/workouts
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var workouts = await _workoutRepository.GetAllAsync(cancellationToken);
-        var response = workouts.Select(w => new WorkoutListItemResponse(w.Id, w.Name, w.Date)).ToList();
-        return Ok(response);
+        var workouts = await getAllWorkoutsHandler.Handle(new GetAllWorkoutsQuery(), cancellationToken);
+        return Ok(workouts);
+    }
+
+    // GET api/workouts/{id}
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+    {
+        var workout = await getWorkoutByIdHandler.Handle(new GetWorkoutByIdQuery(id), cancellationToken);
+        return workout is null ? NotFound() : Ok(workout);
+    }
+
+    // DELETE api/workouts/{id}
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+    {
+        var result = await deleteWorkoutHandler.Handle(new DeleteWorkoutCommand(id), cancellationToken);
+        return result.IsFailure ? NotFound(new { result.Error.Code, result.Error.Description }) : NoContent();
     }
 }
 
-// Request model for creating a workout
-public sealed record CreateWorkoutRequest(
-    [Required, StringLength(100, MinimumLength = 1)] string Name,
-    DateTime Date);
-
-// Response model for creating a workout
+// DTO for creating a workout
+public sealed record CreateWorkoutRequest(string Name);
 public sealed record CreateWorkoutResponse(Guid Id);
-// Response model for listing workouts
-public sealed record WorkoutListItemResponse(Guid Id, string Name, DateTime Date);

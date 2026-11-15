@@ -10,6 +10,8 @@ node_modules/
 dist/
 .angular/
 certs/
+.nx/workspace-data/
+.vscode/
 
 # Docker
 .env

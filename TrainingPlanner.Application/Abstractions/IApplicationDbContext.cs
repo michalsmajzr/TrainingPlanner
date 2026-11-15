@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using TrainingPlanner.Domain.Workouts;
+using TrainingPlanner.Domain.Workouts.TrainingPrograms;
+using TrainingPlanner.Domain.Workouts.Workouts;
 
 namespace TrainingPlanner.Application.Abstractions;
 
 public interface IApplicationDbContext
 {
-    DbSet<Workout> Workouts { get; }
+    DbSet<TrainingProgram> TrainingPrograms { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

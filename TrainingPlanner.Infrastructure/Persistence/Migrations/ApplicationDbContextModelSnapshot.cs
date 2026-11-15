@@ -154,23 +154,285 @@ namespace TrainingPlanner.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.Workout", b =>
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.Exercises.Exercise", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<string>("Equipment")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("MuscleGroup")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("exercise", (string)null);
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.Exercises.ExerciseUserProgression", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ExerciseId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("RecommendedRepetitions")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("RecommendedSets")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("RecommendedWeightKg")
+                        .HasPrecision(7, 2)
+                        .HasColumnType("numeric(7,2)");
+
+                    b.Property<string>("TrainingType")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.HasIndex("UserId", "ExerciseId", "TrainingType")
+                        .IsUnique();
+
+                    b.ToTable("exercise_user_progression", (string)null);
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgram", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CurrentVersionId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CurrentVersionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("training_program", (string)null);
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgramDay", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<int>("Position")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("TrainingProgramVersionId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Workouts");
+                    b.HasIndex("TrainingProgramVersionId", "Position")
+                        .IsUnique();
+
+                    b.ToTable("training_program_day", (string)null);
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgramDayExercise", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ExerciseId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("RepetitionsOverride")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SetsOverride")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("TrainingProgramDayId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal?>("WeightOverrideKg")
+                        .HasPrecision(7, 2)
+                        .HasColumnType("numeric(7,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.HasIndex("TrainingProgramDayId", "Position")
+                        .IsUnique();
+
+                    b.ToTable("training_program_day_exercise", (string)null);
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgramVersion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("TrainingProgramId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("TrainingType")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.Property<int>("VersionNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WorkoutsPerWeek")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrainingProgramId", "VersionNumber")
+                        .IsUnique();
+
+                    b.ToTable("training_program_version", (string)null);
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.Workouts.Workout", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset?>("FinishedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("StartedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.Property<Guid?>("TrainingProgramDayId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TrainingProgramDayId");
+
+                    b.HasIndex("UserId", "StartedAt");
+
+                    b.ToTable("workout", (string)null);
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.Workouts.WorkoutExercise", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ExerciseId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("TrainingProgramDayExerciseId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("WorkoutId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.HasIndex("TrainingProgramDayExerciseId");
+
+                    b.HasIndex("WorkoutId", "Position")
+                        .IsUnique();
+
+                    b.ToTable("workout_exercise", (string)null);
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.Workouts.WorkoutSet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("ActualRepetitions")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal?>("ActualWeightKg")
+                        .HasPrecision(7, 2)
+                        .HasColumnType("numeric(7,2)");
+
+                    b.Property<int>("Position")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TargetRepetitions")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal?>("TargetWeightKg")
+                        .HasPrecision(7, 2)
+                        .HasColumnType("numeric(7,2)");
+
+                    b.Property<Guid>("WorkoutExerciseId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkoutExerciseId", "Position")
+                        .IsUnique();
+
+                    b.ToTable("workout_set", (string)null);
                 });
 
             modelBuilder.Entity("TrainingPlanner.Infrastructure.Identity.User", b =>
@@ -294,6 +556,145 @@ namespace TrainingPlanner.Infrastructure.Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.Exercises.ExerciseUserProgression", b =>
+                {
+                    b.HasOne("TrainingPlanner.Domain.Workouts.Exercises.Exercise", "Exercise")
+                        .WithMany("UserProgressions")
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgram", b =>
+                {
+                    b.HasOne("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgramVersion", "CurrentVersion")
+                        .WithMany()
+                        .HasForeignKey("CurrentVersionId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("CurrentVersion");
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgramDay", b =>
+                {
+                    b.HasOne("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgramVersion", "TrainingProgramVersion")
+                        .WithMany("Days")
+                        .HasForeignKey("TrainingProgramVersionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TrainingProgramVersion");
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgramDayExercise", b =>
+                {
+                    b.HasOne("TrainingPlanner.Domain.Workouts.Exercises.Exercise", "Exercise")
+                        .WithMany()
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgramDay", "TrainingProgramDay")
+                        .WithMany("Exercises")
+                        .HasForeignKey("TrainingProgramDayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+
+                    b.Navigation("TrainingProgramDay");
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgramVersion", b =>
+                {
+                    b.HasOne("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgram", "TrainingProgram")
+                        .WithMany("Versions")
+                        .HasForeignKey("TrainingProgramId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TrainingProgram");
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.Workouts.Workout", b =>
+                {
+                    b.HasOne("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgramDay", "TrainingProgramDay")
+                        .WithMany()
+                        .HasForeignKey("TrainingProgramDayId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("TrainingProgramDay");
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.Workouts.WorkoutExercise", b =>
+                {
+                    b.HasOne("TrainingPlanner.Domain.Workouts.Exercises.Exercise", "Exercise")
+                        .WithMany()
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgramDayExercise", "TrainingProgramDayExercise")
+                        .WithMany()
+                        .HasForeignKey("TrainingProgramDayExerciseId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("TrainingPlanner.Domain.Workouts.Workouts.Workout", "Workout")
+                        .WithMany("Exercises")
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+
+                    b.Navigation("TrainingProgramDayExercise");
+
+                    b.Navigation("Workout");
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.Workouts.WorkoutSet", b =>
+                {
+                    b.HasOne("TrainingPlanner.Domain.Workouts.Workouts.WorkoutExercise", "WorkoutExercise")
+                        .WithMany("Sets")
+                        .HasForeignKey("WorkoutExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("WorkoutExercise");
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.Exercises.Exercise", b =>
+                {
+                    b.Navigation("UserProgressions");
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgram", b =>
+                {
+                    b.Navigation("Versions");
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgramDay", b =>
+                {
+                    b.Navigation("Exercises");
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.TrainingPrograms.TrainingProgramVersion", b =>
+                {
+                    b.Navigation("Days");
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.Workouts.Workout", b =>
+                {
+                    b.Navigation("Exercises");
+                });
+
+            modelBuilder.Entity("TrainingPlanner.Domain.Workouts.Workouts.WorkoutExercise", b =>
+                {
+                    b.Navigation("Sets");
                 });
 #pragma warning restore 612, 618
         }

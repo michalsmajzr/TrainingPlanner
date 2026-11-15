@@ -7,17 +7,17 @@ namespace TrainingPlanner.Api.Controllers.Workouts;
 
 [Route("api/workouts")]
 public sealed class WorkoutsController(
-    ICommandHandler<CreateWorkoutCommand, Guid> createWorkoutHandler,
-    ICommandHandler<DeleteWorkoutCommand, bool> deleteWorkoutHandler,
-    IQueryHandler<GetAllWorkoutsQuery, IReadOnlyList<WorkoutListItemDto>> getAllWorkoutsHandler,
-    IQueryHandler<GetWorkoutByIdQuery, WorkoutDto?> getWorkoutByIdHandler)
+    ICommandHandler<CreateTrainingProgramCommand, Guid> createWorkoutHandler,
+    ICommandHandler<DeleteTrainingProgramCommand, bool> deleteWorkoutHandler,
+    IQueryHandler<GetAllTrainingProgramsQuery, IReadOnlyList<TrainingProgramListItemDto>> getAllWorkoutsHandler,
+    IQueryHandler<GetTrainingProgramIdQuery, TrainingProgramDto?> getWorkoutByIdHandler)
     : ApiControllerBase
 {
     // POST api/workouts
     [HttpPost]
     public async Task<IActionResult> Create(CreateWorkoutRequest request, CancellationToken cancellationToken)
     {
-        var command = new CreateWorkoutCommand(request.Name);
+        var command = new CreateTrainingProgramCommand(request.Name);
         var result = await createWorkoutHandler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
@@ -36,7 +36,7 @@ public sealed class WorkoutsController(
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
-        var workouts = await getAllWorkoutsHandler.Handle(new GetAllWorkoutsQuery(), cancellationToken);
+        var workouts = await getAllWorkoutsHandler.Handle(new GetAllTrainingProgramsQuery(), cancellationToken);
         return Ok(workouts);
     }
 
@@ -44,7 +44,7 @@ public sealed class WorkoutsController(
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
     {
-        var workout = await getWorkoutByIdHandler.Handle(new GetWorkoutByIdQuery(id), cancellationToken);
+        var workout = await getWorkoutByIdHandler.Handle(new GetTrainingProgramIdQuery(id), cancellationToken);
 
         if (workout is null)
         {
@@ -61,7 +61,7 @@ public sealed class WorkoutsController(
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
-        var result = await deleteWorkoutHandler.Handle(new DeleteWorkoutCommand(id), cancellationToken);
+        var result = await deleteWorkoutHandler.Handle(new DeleteTrainingProgramCommand(id), cancellationToken);
 
         if (result.IsFailure)
         {

@@ -22,5 +22,9 @@ public class ExerciseConfiguration : IEntityTypeConfiguration<Exercise>
 
         builder.Property(x => x.Equipment)
             .HasMaxLength(100);
+
+        builder.Property(x => x.IsDefault)
+            .IsRequired()
+            .HasDefaultValue(false);
     }
 }

@@ -11,6 +11,7 @@ using TrainingPlanner.Application.Workouts.Queries;
 using TrainingPlanner.Infrastructure.Auth;
 using TrainingPlanner.Infrastructure.Identity;
 using TrainingPlanner.Infrastructure.Persistence;
+using TrainingPlanner.Infrastructure.Persistence.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,6 +87,7 @@ builder.Services.AddScoped<ICommandHandler<CreateTrainingProgramCommand, Guid>, 
 builder.Services.AddScoped<ICommandHandler<DeleteTrainingProgramCommand, bool>, DeleteTrainingProgramCommandHandler>();
 builder.Services.AddScoped<IQueryHandler<GetAllTrainingProgramsQuery, IReadOnlyList<TrainingProgramListItemDto>>, GetAllTrainingProgramsQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<GetTrainingProgramIdQuery, TrainingProgramDto?>, GetTrainingProgramByIdQueryHandler>();
+builder.Services.AddScoped<IQueryHandler<GetAllExercisesQuery, IReadOnlyList<ExerciseListItemDto>>, GetAllExercisesQueryHandler>();
 
 // Configure CORS policy to allow requests from the Angular frontend.
 builder.Services.AddCors(options =>
@@ -104,6 +106,18 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+
+// Seeder and migrations
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var dbContext = scope.ServiceProvider
+        .GetRequiredService<ApplicationDbContext>();
+
+    await dbContext.Database.MigrateAsync();
+
+    await ExerciseSeeder.SeedAsync(dbContext);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

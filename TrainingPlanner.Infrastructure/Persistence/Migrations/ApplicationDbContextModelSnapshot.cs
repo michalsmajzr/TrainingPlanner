@@ -164,6 +164,11 @@ namespace TrainingPlanner.Infrastructure.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<bool>("IsDefault")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
                     b.Property<string>("MuscleGroup")
                         .IsRequired()
                         .HasMaxLength(100)

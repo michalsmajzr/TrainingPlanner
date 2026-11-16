@@ -12,8 +12,8 @@ using TrainingPlanner.Infrastructure.Persistence;
 namespace TrainingPlanner.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261115223120_Workouts")]
-    partial class Workouts
+    [Migration("20261116215532_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -166,6 +166,11 @@ namespace TrainingPlanner.Infrastructure.Persistence.Migrations
                     b.Property<string>("Equipment")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
+
+                    b.Property<bool>("IsDefault")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("MuscleGroup")
                         .IsRequired()

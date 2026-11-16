@@ -8,6 +8,7 @@
   "DASHBOARD": {
     "TITLE": "Dashboard",
     "CREATE_WORKOUT": "Vytvořit trénink",
+    "RECORD_WORKOUT": "Zapsat trénink",
     "LOADING": "Načítám tréninky...",
     "EMPTY": "Zatím nemáte žádné tréninky.",
     "GO_TO": "Přejít na trénink"
@@ -24,6 +25,11 @@
       "NAME_REQUIRED": "Toto pole je nutné vyplnit.",
       "NAME_MAX_LENGTH": "Maximální délka je 100 znaků."
     }
+  },
+  "EXERCISES": {
+    "TITLE": "Seznam cvičení",
+    "LOADING": "Načítám cvičení…",
+    "EMPTY": "Nebylo nalezeno žádné cvičení."
   },
   "AUTH": {
     "EMAIL": "Email",
@@ -74,6 +80,12 @@
       "DETAIL_LOAD_FAILED": "Trénink se nepodařilo načíst. Zkuste to prosím znovu.",
       "LOAD_FAILED": "Tréninky se nepodařilo načíst. Zkuste to prosím znovu.",
       "DELETE_FAILED": "Trénink se nepodařilo smazat. Zkuste to prosím znovu."
+    },
+    "EXERCISES": {
+      "NOT_FOUND": "Cvičení nebylo nalezeno.",
+      "DETAIL_LOAD_FAILED": "Cvičení se nepodařilo načíst. Zkuste to prosím znovu.",
+      "LOAD_FAILED": "Cvičení se nepodařilo načíst. Zkuste to prosím znovu.",
+      "DELETE_FAILED": "Cvičení se nepodařilo smazat. Zkuste to prosím znovu."
     }
   }
 }

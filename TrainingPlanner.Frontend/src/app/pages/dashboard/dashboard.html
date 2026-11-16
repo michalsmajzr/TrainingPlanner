@@ -2,8 +2,11 @@
     <section class="flex flex-col w-full p-6">
         <app-language-switcher />
         <div class="flex items-center justify-between gap-4 mb-4">
-            <h1 class="text-3xl font-bold">{{ 'DASHBOARD.TITLE' | translate }}</h1>
+          <h1 class="text-3xl font-bold">{{ 'DASHBOARD.TITLE' | translate }}</h1>
+          <div class="flex gap-2">
+            <a hlmBtn routerLink="/record-workout">{{ 'DASHBOARD.RECORD_WORKOUT' | translate }}</a>
             <a hlmBtn routerLink="/create-workout">{{ 'DASHBOARD.CREATE_WORKOUT' | translate }}</a>
+          </div>
         </div>
 
         <p *ngIf="loadError()" role="alert" class="mb-4 text-sm text-destructive">
@@ -19,28 +22,28 @@
         </p>
 
         <div class="grid gap-3">
-            <div hlmCard *ngFor="let w of workouts()" class="relative p-4 transition-colors hover:bg-accent">
-                <a [routerLink]="['/dashboard', w.id]" class="absolute inset-0 rounded-[inherit]">
-                    <span class="sr-only">{{ 'DASHBOARD.GO_TO' | translate }} {{ w.name }}</span>
+            <div hlmCard *ngFor="let workout of workouts()" class="relative p-4 transition-colors hover:bg-accent">
+                <a [routerLink]="['/dashboard', workout.id]" class="absolute inset-0 rounded-[inherit]">
+                    <span class="sr-only">{{ 'DASHBOARD.GO_TO' | translate }} {{ workout.name }}</span>
                 </a>
 
                 <div class="flex items-center justify-between w-full">
                     <div class="pointer-events-none">
-                        <h2 class="text-lg font-medium">{{ w.name }}</h2>
-                        <p class="text-sm text-muted-foreground">{{ w.date | date : 'short' }}</p>
+                        <h2 class="text-lg font-medium">{{ workout.name }}</h2>
+                        <p class="text-sm text-muted-foreground">{{ workout.date | date : 'short' }}</p>
                     </div>
 
                     <div class="relative z-10">
                         <hlm-alert-dialog [closeOnOutsidePointerEvents]="true">
                             <button hlmAlertDialogTrigger hlmBtn variant="destructive" size="sm" class="cursor-pointer"
-                                [disabled]="deletingWorkoutId() === w.id">
+                                [disabled]="deletingWorkoutId() === workout.id">
                                 {{ 'BUTTONS.DELETE' | translate }}
                             </button>
                             <hlm-alert-dialog-content *hlmAlertDialogPortal="let ctx">
                                 <hlm-alert-dialog-header>
                                     <h2 hlmAlertDialogTitle>{{ 'MODAL.DELETE_TITLE' | translate }}</h2>
                                     <p hlmAlertDialogDescription>
-                                        {{ 'MODAL.DELETE_DESC' | translate: { name: w.name } }}
+                                        {{ 'MODAL.DELETE_DESC' | translate: { name: workout.name } }}
                                     </p>
                                 </hlm-alert-dialog-header>
                                 <hlm-alert-dialog-footer>
@@ -48,7 +51,7 @@
                                         {{ 'BUTTONS.CANCEL' | translate }}
                                     </button>
                                     <button hlmAlertDialogAction variant="destructive" class="cursor-pointer"
-                                        (click)="deleteWorkout(w.id); ctx.close()">
+                                        (click)="deleteWorkout(workout.id); ctx.close()">
                                         {{ 'BUTTONS.DELETE' | translate }}
                                     </button>
                                 </hlm-alert-dialog-footer>

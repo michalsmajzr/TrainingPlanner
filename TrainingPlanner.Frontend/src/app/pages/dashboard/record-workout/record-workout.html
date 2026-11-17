@@ -1,44 +1,37 @@
-<main class="mx-auto flex min-h-screen max-w-5xl p-6">
-  <section class="p-6 w-full max-w-md">
+<app-page-layout>
+  <header class="flex flex-col">
     <div class="mb-4">
-      <button hlmBtn variant="outline" routerLink="/dashboard" class="cursor-pointer">
+      <button hlmBtn variant="outline" routerLink="/dashboard">
         <ng-icon data-icon="inline-start" name="lucideArrowLeft" />
         <span>{{ 'WORKOUTS.BACK_TO_DASHBOARD' | translate }}</span>
       </button>
     </div>
+    <div class="flex items-center justify-between mb-4">
+      <app-page-header [title]="'EXERCISES.TITLE' | translate" />
+    </div>
+  </header>
 
-    <section class="flex w-full flex-col">
-      <div class="mb-4 flex items-center justify-between gap-4">
-        <h1 class="text-3xl font-bold">
-          {{ 'EXERCISES.TITLE' | translate }}
-        </h1>
-      </div>
+  <section class="max-w-md">
+    @if (isCreating()) {
+    <p role="status">{{ 'RECORD_WORKOUT.STARTING' | translate }}</p>
+    }
 
-      <p *ngIf="loadError()"
-         role="alert"
-         class="mb-4 text-sm text-destructive">
-        {{ loadError() }}
-      </p>
-
-      <p *ngIf="isLoading()"
-         class="mb-4 text-sm text-muted-foreground">
-        {{ 'EXERCISES.LOADING' | translate }}
-      </p>
-
-      <p *ngIf="!isLoading() && !loadError() && exercises().length === 0"
-         class="mb-4 text-sm text-muted-foreground">
-        {{ 'EXERCISES.EMPTY' | translate }}
-      </p>
-
-      <div *ngIf="!isLoading() && !loadError()" class="grid gap-3">
-        <div hlmCard
-             *ngFor="let exercise of exercises()"
-             class="p-4">
-          <h2 class="text-md font-medium">
-            {{ exercise.name }}
-          </h2>
-        </div>
-      </div>
+    @for (exercise of exercises(); track exercise.id) {
+    <section hlmCard class="mb-3 p-4">
+      <h2 class="text-md font-medium">{{ exercise.name }}</h2>
     </section>
+    }
+
+    @if (workoutId()) {
+    <a hlmCard
+       routerLink="/record-workout/add-exercise"
+       [queryParams]="{ workoutId: workoutId() }"
+       class="flex items-center justify-center gap-3 border-dashed p-3 transition-colors hover:bg-accent">
+      <span class="font-medium">{{ 'RECORD_WORKOUT.ADD_EXERCISE' | translate }}</span>
+    </a>
+    }
+    @if (errorMessage()) {
+    <p role="alert" class="text-sm text-destructive">{{ errorMessage() }}</p>
+    }
   </section>
-</main>
+</app-page-layout>

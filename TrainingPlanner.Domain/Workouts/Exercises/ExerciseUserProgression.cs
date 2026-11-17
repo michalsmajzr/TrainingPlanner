@@ -5,7 +5,7 @@ namespace TrainingPlanner.Domain.Workouts.Exercises;
 public class ExerciseUserProgression
 {
     public Guid Id { get; set; }
-    public Guid UserId { get; set; }
+    public required string UserId { get; set; }
     public Guid ExerciseId { get; set; }
 
     public TrainingType TrainingType { get; set; }

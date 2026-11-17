@@ -1,65 +1,51 @@
-<main class="mx-auto flex min-h-screen max-w-5xl p-6">
-    <section class="flex flex-col w-full p-6">
-        <app-language-switcher />
-        <div class="flex items-center justify-between gap-4 mb-4">
-          <h1 class="text-3xl font-bold">{{ 'DASHBOARD.TITLE' | translate }}</h1>
-          <div class="flex gap-2">
-            <a hlmBtn routerLink="/record-workout">{{ 'DASHBOARD.RECORD_WORKOUT' | translate }}</a>
-            <a hlmBtn routerLink="/create-workout">{{ 'DASHBOARD.CREATE_WORKOUT' | translate }}</a>
-          </div>
-        </div>
+<app-page-layout>
+  <header class="flex flex-col">
+    <app-language-switcher />
+    <div class="flex items-center justify-between mb-4">
+      <app-page-header [title]="'DASHBOARD.TITLE' | translate" />
+      <button hlmBtn routerLink="/record-workout">{{ 'DASHBOARD.RECORD_WORKOUT' | translate }}</button>
+    </div>
+  </header>
 
-        <p *ngIf="loadError()" role="alert" class="mb-4 text-sm text-destructive">
-            {{ loadError() }}
+  <p *ngIf="loadError()"
+      role="alert"
+      class="mb-4 text-sm text-destructive">
+    {{ loadError() }}
+  </p>
+
+  <p *ngIf="isLoading()"
+      class="mb-4 text-sm text-muted-foreground">
+    {{ 'DASHBOARD.LOADING' | translate }}
+  </p>
+
+  <p *ngIf="!isLoading() && !loadError() && workouts().length === 0"
+      class="mb-4 text-sm text-muted-foreground">
+    {{ 'DASHBOARD.EMPTY' | translate }}
+  </p>
+
+  <div class="grid gap-3">
+    <div hlmCard
+          *ngFor="let workout of workouts()"
+          class="relative p-4 transition-colors hover:bg-accent">
+      <a [routerLink]="['/record-workout']"
+          [queryParams]="{ workoutId: workout.id }"
+          class="absolute inset-0 rounded-[inherit]">
+        <span class="sr-only">
+          {{ 'DASHBOARD.GO_TO' | translate }}
+          {{ workout.startedAt | date : 'dd.MM.yyyy HH:mm' }}
+        </span>
+      </a>
+
+      <div class="pointer-events-none">
+        <h2 class="text-lg font-medium">
+          {{ workout.startedAt | date : 'dd.MM.yyyy' }}
+        </h2>
+
+        <p class="text-sm text-muted-foreground">
+          {{ workout.startedAt | date : 'HH:mm' }}
+          {{ workout.exerciseCount }}
         </p>
-
-        <p *ngIf="isLoading()" class="mb-4 text-sm text-muted-foreground">
-            {{ 'DASHBOARD.LOADING' | translate }}
-        </p>
-
-        <p *ngIf="!isLoading() && !loadError() && workouts().length === 0" class="mb-4 text-sm text-muted-foreground">
-            {{ 'DASHBOARD.EMPTY' | translate }}
-        </p>
-
-        <div class="grid gap-3">
-            <div hlmCard *ngFor="let workout of workouts()" class="relative p-4 transition-colors hover:bg-accent">
-                <a [routerLink]="['/dashboard', workout.id]" class="absolute inset-0 rounded-[inherit]">
-                    <span class="sr-only">{{ 'DASHBOARD.GO_TO' | translate }} {{ workout.name }}</span>
-                </a>
-
-                <div class="flex items-center justify-between w-full">
-                    <div class="pointer-events-none">
-                        <h2 class="text-lg font-medium">{{ workout.name }}</h2>
-                        <p class="text-sm text-muted-foreground">{{ workout.date | date : 'short' }}</p>
-                    </div>
-
-                    <div class="relative z-10">
-                        <hlm-alert-dialog [closeOnOutsidePointerEvents]="true">
-                            <button hlmAlertDialogTrigger hlmBtn variant="destructive" size="sm" class="cursor-pointer"
-                                [disabled]="deletingWorkoutId() === workout.id">
-                                {{ 'BUTTONS.DELETE' | translate }}
-                            </button>
-                            <hlm-alert-dialog-content *hlmAlertDialogPortal="let ctx">
-                                <hlm-alert-dialog-header>
-                                    <h2 hlmAlertDialogTitle>{{ 'MODAL.DELETE_TITLE' | translate }}</h2>
-                                    <p hlmAlertDialogDescription>
-                                        {{ 'MODAL.DELETE_DESC' | translate: { name: workout.name } }}
-                                    </p>
-                                </hlm-alert-dialog-header>
-                                <hlm-alert-dialog-footer>
-                                    <button hlmAlertDialogCancel class="cursor-pointer">
-                                        {{ 'BUTTONS.CANCEL' | translate }}
-                                    </button>
-                                    <button hlmAlertDialogAction variant="destructive" class="cursor-pointer"
-                                        (click)="deleteWorkout(workout.id); ctx.close()">
-                                        {{ 'BUTTONS.DELETE' | translate }}
-                                    </button>
-                                </hlm-alert-dialog-footer>
-                            </hlm-alert-dialog-content>
-                        </hlm-alert-dialog>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-</main>
+      </div>
+    </div>
+  </div>
+</app-page-layout>

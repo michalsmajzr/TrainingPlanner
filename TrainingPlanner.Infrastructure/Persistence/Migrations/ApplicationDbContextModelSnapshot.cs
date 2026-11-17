@@ -211,8 +211,9 @@ namespace TrainingPlanner.Infrastructure.Persistence.Migrations
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -241,8 +242,9 @@ namespace TrainingPlanner.Infrastructure.Persistence.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -364,8 +366,9 @@ namespace TrainingPlanner.Infrastructure.Persistence.Migrations
                     b.Property<Guid?>("TrainingProgramDayId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -412,20 +415,20 @@ namespace TrainingPlanner.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("ActualRepetitions")
+                    b.Property<int>("Position")
                         .HasColumnType("integer");
 
-                    b.Property<decimal?>("ActualWeightKg")
-                        .HasPrecision(7, 2)
-                        .HasColumnType("numeric(7,2)");
-
-                    b.Property<int>("Position")
+                    b.Property<int?>("Repetitions")
                         .HasColumnType("integer");
 
                     b.Property<int?>("TargetRepetitions")
                         .HasColumnType("integer");
 
                     b.Property<decimal?>("TargetWeightKg")
+                        .HasPrecision(7, 2)
+                        .HasColumnType("numeric(7,2)");
+
+                    b.Property<decimal?>("WeightKg")
                         .HasPrecision(7, 2)
                         .HasColumnType("numeric(7,2)");
 

@@ -9,11 +9,14 @@ import { HlmAlertDialogImports } from '@spartan-ng/helm/alert-dialog';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmCardImports } from '@spartan-ng/helm/card';
 import { LanguageSwitcherComponent } from '@components/language-switcher';
+import { PageLayoutComponent } from '@components/page-layout/page-layout';
+import { PageHeaderComponent } from '@components/page-header/page-header'; 
 
 type WorkoutListItem = {
   id: string;
-  name: string;
-  date: string;
+  startedAt: string;
+  finishedAt: string | null;
+  exerciseCount: number;
 };
 
 type ApiErrorResponse = {
@@ -33,7 +36,9 @@ type ApiErrorResponse = {
     HlmButtonImports,
     HlmCardImports,
     HlmAlertDialogImports,
-    LanguageSwitcherComponent
+    LanguageSwitcherComponent,
+    PageLayoutComponent,
+    PageHeaderComponent
   ],
   templateUrl: './dashboard.html',
 })
@@ -55,7 +60,7 @@ export class DashboardPage implements OnInit {
     this.loadError.set(null);
 
     this.http
-      .get<WorkoutListItem[]>('https://localhost:7001/api/workouts', {
+      .get<WorkoutListItem[]>('https://localhost:7001/api/workout', {
         withCredentials: true,
       })
       .pipe(finalize(() => this.isLoading.set(false)))
@@ -80,7 +85,7 @@ export class DashboardPage implements OnInit {
       })
       .pipe(
         switchMap((csrf) =>
-          this.http.delete(`https://localhost:7001/api/workouts/${encodeURIComponent(id)}`, {
+          this.http.delete(`https://localhost:7001/api/training-programs/${encodeURIComponent(id)}`, {
             withCredentials: true,
             headers: new HttpHeaders({ 'X-CSRF-TOKEN': csrf.requestToken }),
           })

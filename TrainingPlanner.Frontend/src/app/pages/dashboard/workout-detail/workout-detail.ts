@@ -48,7 +48,7 @@ export class WorkoutDetailPage implements OnInit {
     this.workout.set(null);
 
     this.http
-      .get<WorkoutDetail>(`https://localhost:7001/api/workouts/${encodeURIComponent(id)}`, {
+      .get<WorkoutDetail>(`https://localhost:7001/api/training-programs/${encodeURIComponent(id)}`, {
         withCredentials: true,
       })
       .pipe(finalize(() => this.isLoading.set(false)))
@@ -58,7 +58,7 @@ export class WorkoutDetailPage implements OnInit {
           this.loadError.set(
             this.translate.instant(
               error?.status === 404
-                ? 'ERRORS.WORKOUTS.NOT_FOUND'
+                ? 'ERRORS.training_program.not_found'
                 : 'ERRORS.WORKOUTS.DETAIL_LOAD_FAILED',
             ),
           );

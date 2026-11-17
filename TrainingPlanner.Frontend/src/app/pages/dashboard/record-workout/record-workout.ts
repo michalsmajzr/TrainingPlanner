@@ -1,89 +1,87 @@
-import { CommonModule } from '@angular/common';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, signal } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { finalize } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { finalize, switchMap } from 'rxjs';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
-import { HlmInputImports } from '@spartan-ng/helm/input';
-import { HlmLabelImports } from '@spartan-ng/helm/label';
+import { HlmCardImports } from '@spartan-ng/helm/card';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideArrowLeft } from '@ng-icons/lucide';
-import { HlmCardImports } from '@spartan-ng/helm/card';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-
-type ExerciseListItemDto = {
-  id: string;
-  name: string;
-  muscleGroup: string;
-  equipment: string | null;
-  isDefault: boolean;
-};
-
-type ApiErrorResponse = {
-  statusCode: number;
-  errorCode: string;
-  title: string;
-  detail?: string;
-};
+import { PageLayoutComponent } from '@components/page-layout/page-layout';
+import { PageHeaderComponent } from '@components/page-header/page-header'; 
 
 @Component({
   selector: 'app-record-workout',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, NgIcon, HlmButtonImports, HlmInputImports, HlmLabelImports, HlmCardImports, TranslatePipe],
-  providers: [
-    provideIcons({
-      lucideArrowLeft,
-    }),
+  imports: [
+    RouterLink,
+    NgIcon,
+    HlmButtonImports,
+    HlmCardImports,
+    TranslatePipe,
+    PageLayoutComponent,
+    PageHeaderComponent
   ],
+  providers: [provideIcons({ lucideArrowLeft })],
   templateUrl: './record-workout.html',
 })
-
-
-export class RecordWorkoutPage {
+export class RecordWorkoutPage implements OnInit {
   private readonly http = inject(HttpClient);
   private readonly translate = inject(TranslateService);
 
-  readonly exercises = signal<ExerciseListItemDto[]>([]);
-  readonly loadError = signal<string | null>(null);
-  readonly isLoading = signal(false);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  readonly exercises = signal<{ id: string; name: string; position: number }[]>([]);
+
+  readonly isCreating = signal(false);
+  readonly workoutId = signal<string | null>(null);
+  readonly errorMessage = signal<string | null>(null);
 
   ngOnInit(): void {
-    this.loadExercises();
-  }
-
-  loadExercises(): void {
-    this.isLoading.set(true);
-    this.loadError.set(null);
-
-    this.http
-      .get<ExerciseListItemDto[]>('https://localhost:7001/api/exercises', {
-        withCredentials: true,
-      })
-      .pipe(finalize(() => this.isLoading.set(false)))
-      .subscribe({
-        next: (data) => {
-          this.exercises.set(Array.isArray(data) ? data : []);
-        },
-        error: (error: HttpErrorResponse) => {
-          const message = this.getErrorMessage(error, 'ERRORS.EXERCISES.LOAD_FAILED');
-          this.loadError.set(message);
-          console.error(error);
-        },
-      });
-  }
-
-  private getErrorMessage(error: HttpErrorResponse, fallbackKey: string): string {
-    const apiError = error.error as ApiErrorResponse | undefined;
-
-    if (apiError?.errorCode) {
-      const translationKey = `ERRORS.${apiError.errorCode}`;
-      const translated = this.translate.instant(translationKey);
-
-      if (translated !== translationKey) {
-        return translated;
-      }
+    const id = this.route.snapshot.queryParamMap.get('workoutId');
+    if (id) {
+      this.workoutId.set(id);
+      this.loadWorkout(id);
+    } else {
+      this.createWorkout();
     }
+  }
 
-    return this.translate.instant(fallbackKey);
+  private loadWorkout(id: string): void {
+    this.http.get<{ exercises: { id: string; name: string; position: number }[] }>(
+      'https://localhost:7001/api/workout/' + encodeURIComponent(id),
+      { withCredentials: true },
+    ).subscribe({
+      next: workout => this.exercises.set([...workout.exercises].sort((a, b) => a.position - b.position)),
+      error: () => this.errorMessage.set(this.translate.instant('RECORD_WORKOUT.LOAD_FAILED')),
+    });
+  }
+
+  private createWorkout(): void {
+    if (this.isCreating() || this.workoutId()) return;
+    this.isCreating.set(true);
+    this.errorMessage.set(null);
+
+    this.http.get<{ requestToken: string }>('https://localhost:7001/api/auth/csrf', {
+      withCredentials: true,
+    }).pipe(
+      switchMap(csrf => this.http.post<{ id: string }>('https://localhost:7001/api/workout', {}, {
+        withCredentials: true,
+        headers: new HttpHeaders({ 'X-CSRF-TOKEN': csrf.requestToken }),
+      })),
+      finalize(() => this.isCreating.set(false)),
+    ).subscribe({
+      next: result => {
+        this.workoutId.set(result.id);
+        void this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: { workoutId: result.id },
+          queryParamsHandling: 'merge',
+          replaceUrl: true,
+        });
+      },
+      error: (_error: HttpErrorResponse) => {
+        this.errorMessage.set(this.translate.instant('RECORD_WORKOUT.FAILED'));
+      },
+    });
   }
 }

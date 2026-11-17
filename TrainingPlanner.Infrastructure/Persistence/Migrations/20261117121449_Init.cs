@@ -179,7 +179,7 @@ namespace TrainingPlanner.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false),
                     ExerciseId = table.Column<Guid>(type: "uuid", nullable: false),
                     TrainingType = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
                     RecommendedWeightKg = table.Column<decimal>(type: "numeric(7,2)", precision: 7, scale: 2, nullable: false),
@@ -203,7 +203,7 @@ namespace TrainingPlanner.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     CurrentVersionId = table.Column<Guid>(type: "uuid", nullable: true)
@@ -289,7 +289,7 @@ namespace TrainingPlanner.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false),
                     TrainingProgramDayId = table.Column<Guid>(type: "uuid", nullable: true),
                     StartedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     FinishedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
@@ -344,10 +344,10 @@ namespace TrainingPlanner.Infrastructure.Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     WorkoutExerciseId = table.Column<Guid>(type: "uuid", nullable: false),
                     Position = table.Column<int>(type: "integer", nullable: false),
+                    WeightKg = table.Column<decimal>(type: "numeric(7,2)", precision: 7, scale: 2, nullable: true),
+                    Repetitions = table.Column<int>(type: "integer", nullable: true),
                     TargetWeightKg = table.Column<decimal>(type: "numeric(7,2)", precision: 7, scale: 2, nullable: true),
-                    TargetRepetitions = table.Column<int>(type: "integer", nullable: true),
-                    ActualWeightKg = table.Column<decimal>(type: "numeric(7,2)", precision: 7, scale: 2, nullable: true),
-                    ActualRepetitions = table.Column<int>(type: "integer", nullable: true)
+                    TargetRepetitions = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {

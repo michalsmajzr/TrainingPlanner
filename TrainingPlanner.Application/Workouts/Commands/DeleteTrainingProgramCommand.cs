@@ -14,7 +14,7 @@ public sealed class DeleteTrainingProgramCommandHandler(IApplicationDbContext db
 
         if (trainingProgram is null)
         {
-            return Result<bool>.Failure(new Error("TrainingProgram.NotFound", "TrainingProgram was not found."));
+            return Result<bool>.Failure(new Error("training_program.not_found", "TrainingProgram was not found."));
         }
 
         dbContext.TrainingPrograms.Remove(trainingProgram);

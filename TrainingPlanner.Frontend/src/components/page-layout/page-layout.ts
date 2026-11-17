@@ -1,0 +1,10 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-page-layout',
+  standalone: true,
+  templateUrl: './page-layout.html',
+})
+
+export class PageLayoutComponent {
+}

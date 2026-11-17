@@ -15,7 +15,7 @@ public class WorkoutSetConfiguration: IEntityTypeConfiguration<WorkoutSet>
         builder.Property(x => x.TargetWeightKg)
             .HasPrecision(7, 2);
 
-        builder.Property(x => x.ActualWeightKg)
+        builder.Property(x => x.WeightKg)
             .HasPrecision(7, 2);
 
         builder.HasIndex(x => new

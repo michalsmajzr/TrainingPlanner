@@ -47,7 +47,7 @@ export class CreateWorkoutPage {
       })
       .subscribe((csrf) => {
         this.http
-          .post('https://localhost:7001/api/workouts', body, {
+          .post('https://localhost:7001/api/training-programs', body, {
             withCredentials: true,
             headers: new HttpHeaders({ 'X-CSRF-TOKEN': csrf.requestToken }),
           })

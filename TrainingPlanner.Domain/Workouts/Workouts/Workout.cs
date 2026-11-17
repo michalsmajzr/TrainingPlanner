@@ -6,7 +6,7 @@ namespace TrainingPlanner.Domain.Workouts.Workouts;
 public class Workout
 {
     public Guid Id { get; set; }
-    public Guid UserId { get; set; }
+    public required string UserId { get; set; }
 
     public Guid? TrainingProgramDayId { get; set; }
 

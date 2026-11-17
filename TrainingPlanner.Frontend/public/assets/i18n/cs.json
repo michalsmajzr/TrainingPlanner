@@ -9,14 +9,15 @@
     "TITLE": "Dashboard",
     "CREATE_WORKOUT": "Vytvořit trénink",
     "RECORD_WORKOUT": "Zapsat trénink",
-    "LOADING": "Načítám tréninky...",
-    "EMPTY": "Zatím nemáte žádné tréninky.",
+    "LOADING": "Načítám tréninkové programy...",
+    "EMPTY": "Zatím nemáte žádné tréninkové programy.",
     "GO_TO": "Přejít na trénink"
   },
   "WORKOUTS": {
-    "DELETE_SUCCESS": "Trénink byl úspěšně smazán.",
+    "DELETE_SUCCESS": "Tréninkový program byl úspěšně smazán.",
     "LOADING_DETAIL": "Načítám trénink...",
     "BACK_TO_DASHBOARD": "Zpět na dashboard",
+    "BACK_RECORD_WORKOUT": "Zpět na zapsat trénink",
     "CREATE_SUCCESS": "Trénink byl úspěšně vytvořen.",
     "CREATE": {
       "TITLE": "Vytvořit trénink",
@@ -27,9 +28,9 @@
     }
   },
   "EXERCISES": {
-    "TITLE": "Seznam cvičení",
-    "LOADING": "Načítám cvičení…",
-    "EMPTY": "Nebylo nalezeno žádné cvičení."
+    "TITLE": "Seznam cviků",
+    "LOADING": "Načítám cviky…",
+    "EMPTY": "Nebyly nalezeny žádné cviky."
   },
   "AUTH": {
     "EMAIL": "Email",
@@ -64,28 +65,43 @@
     "SAVE": "Uložit"
   },
   "MODAL": {
-    "DELETE_TITLE": "Opravdu chcete smazat tento trénink?",
-    "DELETE_DESC": "Tato akce je nevratná. Trénink „{{ name }}“ bude trvale odstraněn."
+    "DELETE_TITLE": "Opravdu chcete smazat tento tréninkový program?",
+    "DELETE_DESC": "Tato akce je nevratná. Tréninkový program „{{ name }}“ bude trvale odstraněn."
   },
   "ERRORS": {
     "workout": {
-      "not_found": "Požadovaný trénink nebyl nalezen."
+      "not_found": "Trénink nebyl nalezen.",
+      "not_in_progress": "Trénink už neprobíhá.",
+      "invalid_user": "Neplatný uživatel."
+    },
+    "training_program": {
+      "not_found": "Požadovaný tréninkový program nebyl nalezen."
     },
     "AUTH": {
       "LOGIN_FAILED": "Přihlášení se nezdařilo.",
       "REGISTER_FAILED": "Registrace se nezdařila."
     },
     "WORKOUTS": {
-      "NOT_FOUND": "Trénink nebyl nalezen.",
-      "DETAIL_LOAD_FAILED": "Trénink se nepodařilo načíst. Zkuste to prosím znovu.",
-      "LOAD_FAILED": "Tréninky se nepodařilo načíst. Zkuste to prosím znovu.",
-      "DELETE_FAILED": "Trénink se nepodařilo smazat. Zkuste to prosím znovu."
+      "NOT_FOUND": "Tréninkový program nebyl nalezen.",
+      "DETAIL_LOAD_FAILED": "Tréninkový program se nepodařilo načíst. Zkuste to prosím znovu.",
+      "LOAD_FAILED": "Tréninkové programy se nepodařilo načíst. Zkuste to prosím znovu.",
+      "DELETE_FAILED": "Tréninkový program se nepodařilo smazat. Zkuste to prosím znovu."
     },
     "EXERCISES": {
-      "NOT_FOUND": "Cvičení nebylo nalezeno.",
-      "DETAIL_LOAD_FAILED": "Cvičení se nepodařilo načíst. Zkuste to prosím znovu.",
-      "LOAD_FAILED": "Cvičení se nepodařilo načíst. Zkuste to prosím znovu.",
-      "DELETE_FAILED": "Cvičení se nepodařilo smazat. Zkuste to prosím znovu."
+      "NOT_FOUND": "Cvik nebyl nalezen.",
+      "DETAIL_LOAD_FAILED": "Cvik se nepodařilo načíst. Zkuste to prosím znovu.",
+      "LOAD_FAILED": "Cviky se nepodařilo načíst. Zkuste to prosím znovu.",
+      "DELETE_FAILED": "Cvik se nepodařilo smazat. Zkuste to prosím znovu."
     }
+  },
+  "RECORD_WORKOUT": {
+    "LOAD_FAILED": "Trénink se nepodařilo načíst.",
+    "ADD_FAILED": "Cvik se nepodařilo přidat.",
+    "ADDING": "Přidávám cvik...",
+    "MISSING_ID": "Chybí ID tréninku. Otevři výběr cviků z rozpracovaného tréninku.",
+    "START": "Začít trénink",
+    "STARTING": "Vytvářím trénink...",
+    "ADD_EXERCISE": "Přidat cvik",
+    "FAILED": "Trénink se nepodařilo vytvořit."
   }
 }

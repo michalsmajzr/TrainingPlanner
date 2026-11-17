@@ -8,6 +8,8 @@ using TrainingPlanner.Application.Auth;
 using TrainingPlanner.Application.Auth.Commands;
 using TrainingPlanner.Application.Workouts.Commands;
 using TrainingPlanner.Application.Workouts.Queries;
+using TrainingPlanner.Domain.Workouts.Exercises;
+using TrainingPlanner.Domain.Workouts.Workouts;
 using TrainingPlanner.Infrastructure.Auth;
 using TrainingPlanner.Infrastructure.Identity;
 using TrainingPlanner.Infrastructure.Persistence;
@@ -88,6 +90,11 @@ builder.Services.AddScoped<ICommandHandler<DeleteTrainingProgramCommand, bool>, 
 builder.Services.AddScoped<IQueryHandler<GetAllTrainingProgramsQuery, IReadOnlyList<TrainingProgramListItemDto>>, GetAllTrainingProgramsQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<GetTrainingProgramIdQuery, TrainingProgramDto?>, GetTrainingProgramByIdQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<GetAllExercisesQuery, IReadOnlyList<ExerciseListItemDto>>, GetAllExercisesQueryHandler>();
+builder.Services.AddScoped<ICommandHandler<CreateWorkoutCommand, Guid>, CreateWorkoutCommandHandler>();
+builder.Services.AddScoped<IQueryHandler<GetWorkoutByIdQuery, WorkoutDto?>, GetWorkoutByIdQueryHandler>();
+builder.Services.AddScoped<ICommandHandler<AddWorkoutExerciseCommand, Guid>, AddWorkoutExerciseCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<FinishWorkoutCommand, bool>, FinishWorkoutCommandHandler>();
+builder.Services.AddScoped<IQueryHandler<GetAllWorkoutsQuery, IReadOnlyList<WorkoutListItemDto>>, GetAllWorkoutsQueryHandler>();
 
 // Configure CORS policy to allow requests from the Angular frontend.
 builder.Services.AddCors(options =>

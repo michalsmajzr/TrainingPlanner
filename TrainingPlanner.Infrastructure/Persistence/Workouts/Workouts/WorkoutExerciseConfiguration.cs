@@ -23,11 +23,6 @@ public class WorkoutExerciseConfiguration : IEntityTypeConfiguration<WorkoutExer
             .HasForeignKey(x => x.ExerciseId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne(x => x.TrainingProgramDayExercise)
-            .WithMany()
-            .HasForeignKey(x => x.TrainingProgramDayExerciseId)
-            .OnDelete(DeleteBehavior.NoAction);
-
         builder.HasMany(x => x.Sets)
             .WithOne(x => x.WorkoutExercise)
             .HasForeignKey(x => x.WorkoutExerciseId)

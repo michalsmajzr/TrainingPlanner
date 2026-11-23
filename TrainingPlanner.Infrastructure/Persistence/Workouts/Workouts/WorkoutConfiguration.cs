@@ -22,11 +22,6 @@ public class WorkoutConfiguration : IEntityTypeConfiguration<Workout>
             x.StartedAt
         });
 
-        builder.HasOne(x => x.TrainingProgramDay)
-            .WithMany()
-            .HasForeignKey(x => x.TrainingProgramDayId)
-            .OnDelete(DeleteBehavior.NoAction);
-
         builder.HasMany(x => x.Exercises)
             .WithOne(x => x.Workout)
             .HasForeignKey(x => x.WorkoutId)

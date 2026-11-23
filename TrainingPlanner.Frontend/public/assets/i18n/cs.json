@@ -74,9 +74,6 @@
       "not_in_progress": "Trénink už neprobíhá.",
       "invalid_user": "Neplatný uživatel."
     },
-    "training_program": {
-      "not_found": "Požadovaný tréninkový program nebyl nalezen."
-    },
     "AUTH": {
       "LOGIN_FAILED": "Přihlášení se nezdařilo.",
       "REGISTER_FAILED": "Registrace se nezdařila."

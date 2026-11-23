@@ -85,10 +85,6 @@ builder.Services.AddScoped<ICommandHandler<RegisterUserCommand, AuthUser>, Regis
 builder.Services.AddScoped<ICommandHandler<LoginUserCommand, AuthUser>, LoginUserCommandHandler>();
 // Register the workout repository and command handler for creating workouts.
 builder.Services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
-builder.Services.AddScoped<ICommandHandler<CreateTrainingProgramCommand, Guid>, CreateTrainingProgramCommandHandler>();
-builder.Services.AddScoped<ICommandHandler<DeleteTrainingProgramCommand, bool>, DeleteTrainingProgramCommandHandler>();
-builder.Services.AddScoped<IQueryHandler<GetAllTrainingProgramsQuery, IReadOnlyList<TrainingProgramListItemDto>>, GetAllTrainingProgramsQueryHandler>();
-builder.Services.AddScoped<IQueryHandler<GetTrainingProgramIdQuery, TrainingProgramDto?>, GetTrainingProgramByIdQueryHandler>();
 builder.Services.AddScoped<IQueryHandler<GetAllExercisesQuery, IReadOnlyList<ExerciseListItemDto>>, GetAllExercisesQueryHandler>();
 builder.Services.AddScoped<ICommandHandler<CreateWorkoutCommand, Guid>, CreateWorkoutCommandHandler>();
 builder.Services.AddScoped<IQueryHandler<GetWorkoutByIdQuery, WorkoutDto?>, GetWorkoutByIdQueryHandler>();

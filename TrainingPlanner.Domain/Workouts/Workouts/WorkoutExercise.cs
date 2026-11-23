@@ -1,5 +1,4 @@
-﻿using TrainingPlanner.Domain.Workouts.Exercises;
-using TrainingPlanner.Domain.Workouts.TrainingPrograms;
+using TrainingPlanner.Domain.Workouts.Exercises;
 
 namespace TrainingPlanner.Domain.Workouts.Workouts;
 
@@ -16,9 +15,6 @@ public class WorkoutExercise
 
     public Workout Workout { get; set; } = null!;
     public Exercise Exercise { get; set; } = null!;
-
-    public TrainingProgramDayExercise? TrainingProgramDayExercise
-    { get; set; }
 
     public ICollection<WorkoutSet> Sets
     { get; set; } = new List<WorkoutSet>();

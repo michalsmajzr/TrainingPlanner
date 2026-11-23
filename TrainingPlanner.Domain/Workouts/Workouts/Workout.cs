@@ -1,4 +1,3 @@
-﻿using TrainingPlanner.Domain.Workouts.TrainingPrograms;
 using TrainingPlanner.Domain.Workouts.Enums;
 
 namespace TrainingPlanner.Domain.Workouts.Workouts;
@@ -14,8 +13,6 @@ public class Workout
     public DateTimeOffset? FinishedAt { get; set; }
 
     public WorkoutStatus Status { get; set; }
-
-    public TrainingProgramDay? TrainingProgramDay { get; set; }
 
     public ICollection<WorkoutExercise> Exercises
     { get; set; } = new List<WorkoutExercise>();

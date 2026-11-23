@@ -76,35 +76,6 @@ export class DashboardPage implements OnInit {
       });
   }
 
-  deleteWorkout(id: string): void {
-    this.deletingWorkoutId.set(id);
-
-    this.http
-      .get<{ requestToken: string }>('https://localhost:7001/api/auth/csrf', {
-        withCredentials: true,
-      })
-      .pipe(
-        switchMap((csrf) =>
-          this.http.delete(`https://localhost:7001/api/training-programs/${encodeURIComponent(id)}`, {
-            withCredentials: true,
-            headers: new HttpHeaders({ 'X-CSRF-TOKEN': csrf.requestToken }),
-          })
-        ),
-        finalize(() => this.deletingWorkoutId.set(null))
-      )
-      .subscribe({
-        next: () => {
-          this.workouts.update((workouts) => workouts.filter((w) => w.id !== id));
-          toast.success(this.translate.instant('WORKOUTS.DELETE_SUCCESS'));
-        },
-        error: (error: HttpErrorResponse) => {
-          const errorMessage = this.getErrorMessage(error, 'ERRORS.WORKOUTS.DELETE_FAILED');
-          toast.error(errorMessage);
-          console.error(error);
-        },
-      });
-  }
-
   private getErrorMessage(error: HttpErrorResponse, fallbackKey: string): string {
     const apiError = error.error as ApiErrorResponse | undefined;
 

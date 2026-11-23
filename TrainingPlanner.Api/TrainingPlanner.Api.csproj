@@ -26,8 +26,4 @@
     <ProjectReference Include="..\TrainingPlanner.Infrastructure\TrainingPlanner.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Contracts\" />
-  </ItemGroup>
-
 </Project>

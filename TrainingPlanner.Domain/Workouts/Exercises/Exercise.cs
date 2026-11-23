@@ -8,7 +8,4 @@ public class Exercise
     public string MuscleGroup { get; set; } = string.Empty;
     public string? Equipment { get; set; }
     public bool IsDefault { get; set; }
-
-    public ICollection<ExerciseUserProgression> UserProgressions
-    { get; set; } = new List<ExerciseUserProgression>();
 }

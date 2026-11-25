@@ -21,7 +21,15 @@ public sealed class AuthController(
     public IActionResult GetCsrfToken()
     {
         var tokens = antiforgery.GetAndStoreTokens(HttpContext);
-        return Ok(new { requestToken = tokens.RequestToken });
+        Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken!, new CookieOptions
+        {
+            HttpOnly = false,
+            Secure = true,
+            SameSite = SameSiteMode.Lax,
+            Path = "/"
+        });
+        Response.Headers.CacheControl = "no-store";
+        return NoContent();
     }
 
     [AllowAnonymous]

@@ -7,18 +7,50 @@
       </button>
     </div>
     <div class="flex items-center justify-between mb-4">
-      <app-page-header [title]="'EXERCISES.TITLE' | translate" />
+      <app-page-header [title]="pageTitle()" />
     </div>
   </header>
 
-  <section class="max-w-md">
+  <section class="flex flex-col gap-3">
     @if (isCreating()) {
     <p role="status">{{ 'RECORD_WORKOUT.STARTING' | translate }}</p>
     }
 
     @for (exercise of exercises(); track exercise.id) {
-    <section hlmCard class="mb-3 p-4">
-      <h2 class="text-md font-medium">{{ exercise.name }}</h2>
+    <section hlmCard class="p-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-md font-medium">
+          {{exercise.isDefault ? (('EXERCISES.NAMES.' + exercise.name) | translate) : exercise.name}}
+        </h2>
+
+        <hlm-alert-dialog #deleteDialog="hlmAlertDialog" [closeOnOutsidePointerEvents]="true">
+          <button hlmBtn
+                  hlmAlertDialogTrigger
+                  type="button"
+                  variant="destructive"
+                  size="icon"
+                  class="shrink-0"
+                  [attr.aria-label]="'RECORD_WORKOUT.DELETE_EXERCISE' | translate">
+            <ng-icon name="lucideX" />
+          </button>
+
+          <ng-template hlmAlertDialogPortal>
+            <hlm-alert-dialog-content>
+              <hlm-alert-dialog-header>
+                <h2 hlmAlertDialogTitle>{{ 'RECORD_WORKOUT.DELETE_TITLE' | translate }}</h2>
+                <p hlmAlertDialogDescription>{{ 'RECORD_WORKOUT.DELETE_DESCRIPTION' | translate }}</p>
+              </hlm-alert-dialog-header>
+              <hlm-alert-dialog-footer>
+                <button hlmAlertDialogCancel type="button">{{ 'BUTTONS.CANCEL' | translate }}</button>
+                <button hlmAlertDialogAction type="button" variant="destructive"
+                        (click)="deleteExercise(exercise.id); deleteDialog.close()">
+                  {{ 'BUTTONS.DELETE' | translate }}
+                </button>
+              </hlm-alert-dialog-footer>
+            </hlm-alert-dialog-content>
+          </ng-template>
+        </hlm-alert-dialog>
+      </div>
     </section>
     }
 
@@ -26,7 +58,7 @@
     <a hlmCard
        routerLink="/record-workout/add-exercise"
        [queryParams]="{ workoutId: workoutId() }"
-       class="flex items-center justify-center gap-3 border-dashed p-3 transition-colors hover:bg-accent">
+       class="cursor-pointer items-center justify-center gap-3 p-3 transition-colors hover:bg-muted dark:hover:bg-input/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
       <span class="font-medium">{{ 'RECORD_WORKOUT.ADD_EXERCISE' | translate }}</span>
     </a>
     }

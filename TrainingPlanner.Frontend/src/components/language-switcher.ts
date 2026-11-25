@@ -25,7 +25,7 @@ interface Language {
 
     <ng-template #menu>
       <hlm-dropdown-menu class="w-32">
-        <div hlmDropdownMenuGroup>
+        <div hlmDropdownMenuGroup class="flex flex-col gap-1">
           @for (lang of languages; track lang.code) {
             <button
               hlmDropdownMenuItem

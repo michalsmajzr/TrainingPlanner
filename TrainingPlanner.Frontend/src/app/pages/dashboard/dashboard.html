@@ -1,6 +1,9 @@
 <app-page-layout>
   <header class="flex flex-col">
-    <app-language-switcher />
+    <div class="flex items-center mb-4 gap-2">
+      <app-language-switcher />
+      <app-theme-switcher />
+    </div>
     <div class="flex items-center justify-between mb-4">
       <app-page-header [title]="'DASHBOARD.TITLE' | translate" />
       <button hlmBtn routerLink="/record-workout">{{ 'DASHBOARD.RECORD_WORKOUT' | translate }}</button>
@@ -24,19 +27,13 @@
   </p>
 
   <div class="grid gap-3">
-    <div hlmCard
+    <a hlmCard
           *ngFor="let workout of workouts()"
-          class="relative p-4 transition-colors hover:bg-accent">
-      <a [routerLink]="['/record-workout']"
+          class="cursor-pointer p-4 transition-colors hover:bg-muted dark:hover:bg-input/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          [routerLink]="['/record-workout']"
           [queryParams]="{ workoutId: workout.id }"
-          class="absolute inset-0 rounded-[inherit]">
-        <span class="sr-only">
-          {{ 'DASHBOARD.GO_TO' | translate }}
-          {{ workout.startedAt | date : 'dd.MM.yyyy HH:mm' }}
-        </span>
-      </a>
-
-      <div class="pointer-events-none">
+          [attr.aria-label]="('DASHBOARD.GO_TO' | translate) + ' ' + (workout.startedAt | date : 'dd.MM.yyyy HH:mm')">
+      <div>
         <h2 class="text-lg font-medium">
           {{ workout.startedAt | date : 'dd.MM.yyyy' }}
         </h2>
@@ -46,6 +43,6 @@
           {{ workout.exerciseCount }}
         </p>
       </div>
-    </div>
+    </a>
   </div>
 </app-page-layout>

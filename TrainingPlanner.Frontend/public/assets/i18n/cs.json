@@ -1,4 +1,8 @@
 {
+  "THEME": {
+    "LIGHT": "Zapnout světlý režim",
+    "DARK": "Zapnout tmavý režim"
+  },
   "HOME": {
     "HEADING": "Plánuj svůj trénink",
     "DESCRIPTION": "Přihlaste se ke svému účtu, nebo si vytvořte nový.",
@@ -30,7 +34,38 @@
   "EXERCISES": {
     "TITLE": "Seznam cviků",
     "LOADING": "Načítám cviky…",
-    "EMPTY": "Nebyly nalezeny žádné cviky."
+    "EMPTY": "Nebyly nalezeny žádné cviky.",
+    "NAMES": {
+      "squat": "Dřep",
+      "pushUp": "Klik",
+      "deadlift": "Mrtvý tah",
+      "benchPress": "Tlaky s velkou činkou na rovné lavici",
+      "pullUp": "Shyb",
+      "overheadPress": "Tlak s velkou činkou nad hlavu",
+
+      "wideGripLatPulldown": "Stahování horní kladky k hrudníku širokým úchopem",
+      "seatedCableRow": "Přitahování spodní kladky k tělu",
+      "standingDumbbellLateralRaise": "Upažování s jednoručkami vestoje",
+      "rotatingDumbbellCurl": "Bicepsový zdvih s jednoručkami s vytáčením",
+      "tricepsPushdown": "Stahování horní kladky na triceps",
+
+      "inclineDumbbellBenchPress": "Tlaky s jednoručkami na šikmé lavici",
+      "barbellBentOverRow": "Přitahování velké činky v předklonu",
+      "dips": "Kliky na bradlech",
+      "bentOverDumbbellReverseFly": "Upažování v předklonu s jednoručkami",
+      "preacherCurl": "Bicepsový zdvih na Scottově lavici",
+
+      "legPress": "Legpress",
+      "dumbbellRomanianDeadlift": "Rumunský mrtvý tah s jednoručkami",
+      "legExtension": "Předkopávání na stroji",
+      "standingCalfRaise": "Výpony na lýtka vestoje",
+      "hangingLegRaise": "Zvedání nohou ve visu",
+
+      "hackSquat": "Hacksquat",
+      "legCurl": "Zakopávání na stroji",
+      "seatedCalfRaise": "Výpony na lýtka vsedě",
+      "sitUp": "Sedy-lehy"
+    }
   },
   "AUTH": {
     "EMAIL": "Email",
@@ -92,6 +127,12 @@
     }
   },
   "RECORD_WORKOUT": {
+    "TITLE": "Trénink",
+    "DATE_FORMAT": "d. M.",
+    "DELETE_EXERCISE": "Odebrat cvik",
+    "DELETE_TITLE": "Odebrat cvik?",
+    "DELETE_DESCRIPTION": "Cvik a všechny jeho série budou z tohoto tréninku odstraněny.",
+    "DELETE_FAILED": "Cvik se nepodařilo odebrat.",
     "LOAD_FAILED": "Trénink se nepodařilo načíst.",
     "ADD_FAILED": "Cvik se nepodařilo přidat.",
     "ADDING": "Přidávám cvik...",

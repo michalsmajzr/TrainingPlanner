@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { finalize, switchMap } from 'rxjs';
+import { finalize } from 'rxjs';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmInputImports } from '@spartan-ng/helm/input';
 import { HlmLabelImports } from '@spartan-ng/helm/label';
@@ -68,14 +68,10 @@ export class AddExercisePage {
     this.isSaving.set(true);
     this.saveError.set(null);
 
-    this.http.get<{ requestToken: string }>('https://localhost:7001/api/auth/csrf', {
-      withCredentials: true,
-    }).pipe(
-      switchMap(csrf => this.http.post(
-        'https://localhost:7001/api/workout/' + encodeURIComponent(this.workoutId!) + '/exercises',
+    this.http.post(
+        '/api/workout/' + encodeURIComponent(this.workoutId) + '/exercises',
         { exerciseId },
-        { withCredentials: true, headers: new HttpHeaders({ 'X-CSRF-TOKEN': csrf.requestToken }) },
-      )),
+    ).pipe(
       finalize(() => this.isSaving.set(false)),
     ).subscribe({
       next: () => {
@@ -102,9 +98,7 @@ export class AddExercisePage {
     this.loadError.set(null);
 
     this.http
-      .get<ExerciseListItemDto[]>('https://localhost:7001/api/exercises', {
-        withCredentials: true,
-      })
+      .get<ExerciseListItemDto[]>('/api/exercises')
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
         next: (data) => {

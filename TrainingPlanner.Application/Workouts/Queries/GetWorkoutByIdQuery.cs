@@ -18,7 +18,8 @@ public sealed record WorkoutExerciseDto(
     Guid ExerciseId,
     string Name,
     int Position,
-    IReadOnlyList<WorkoutSetDto> Sets);
+    IReadOnlyList<WorkoutSetDto> Sets,
+    bool IsDefault);
 
 public sealed record WorkoutSetDto(
     Guid Id,
@@ -62,7 +63,9 @@ public sealed class GetWorkoutByIdQueryHandler(IApplicationDbContext dbContext) 
                             s.Position,
                             s.WeightKg,
                             s.Repetitions))
-                        .ToList()))
-                .ToList());
+                        .ToList(),
+                    x.Exercise.IsDefault))
+                .ToList()
+        );
     }
 }

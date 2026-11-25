@@ -1,4 +1,8 @@
 {
+  "THEME": {
+    "LIGHT": "Switch to light mode",
+    "DARK": "Switch to dark mode"
+  },
   "HOME": {
     "HEADING": "Plan your training",
     "DESCRIPTION": "Sign in to your account or create a new one.",
@@ -30,7 +34,38 @@
   "EXERCISES": {
     "TITLE": "Exercise list",
     "LOADING": "Loading exercises…",
-    "EMPTY": "No exercises found."
+    "EMPTY": "No exercises found.",
+    "NAMES": {
+      "squat": "Squat",
+      "pushUp": "Push-up",
+      "deadlift": "Deadlift",
+      "benchPress": "Flat barbell bench press",
+      "pullUp": "Pull-up",
+      "overheadPress": "Barbell overhead press",
+
+      "wideGripLatPulldown": "Wide-grip lat pulldown",
+      "seatedCableRow": "Seated cable row",
+      "standingDumbbellLateralRaise": "Standing dumbbell lateral raise",
+      "rotatingDumbbellCurl": "Rotating dumbbell curl",
+      "tricepsPushdown": "Triceps pushdown",
+
+      "inclineDumbbellBenchPress": "Incline dumbbell bench press",
+      "barbellBentOverRow": "Barbell bent-over row",
+      "dips": "Dips",
+      "bentOverDumbbellReverseFly": "Bent-over dumbbell reverse fly",
+      "preacherCurl": "Preacher curl",
+
+      "legPress": "Leg press",
+      "dumbbellRomanianDeadlift": "Dumbbell Romanian deadlift",
+      "legExtension": "Leg extension",
+      "standingCalfRaise": "Standing calf raise",
+      "hangingLegRaise": "Hanging leg raise",
+
+      "hackSquat": "Hack squat",
+      "legCurl": "Leg curl",
+      "seatedCalfRaise": "Seated calf raise",
+      "sitUp": "Sit-up"
+    }
   },
   "AUTH": {
     "EMAIL": "Email",
@@ -92,6 +127,12 @@
     }
   },
   "RECORD_WORKOUT": {
+    "TITLE": "Workout",
+    "DATE_FORMAT": "MMMM d",
+    "DELETE_EXERCISE": "Remove exercise",
+    "DELETE_TITLE": "Remove exercise?",
+    "DELETE_DESCRIPTION": "The exercise and all its sets will be removed from this workout.",
+    "DELETE_FAILED": "Failed to remove the exercise.",
     "LOAD_FAILED": "Failed to load workout.",
     "ADD_FAILED": "Failed to add exercise.",
     "ADDING": "Adding exercise...",

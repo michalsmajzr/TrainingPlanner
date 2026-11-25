@@ -73,7 +73,7 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddAntiforgery(options =>
 {
-    options.HeaderName = "X-CSRF-TOKEN";
+    options.HeaderName = "X-XSRF-TOKEN";
     options.Cookie.Name = "__Host-TrainingPlanner.Antiforgery";
     options.Cookie.Path = "/";
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
@@ -91,6 +91,7 @@ builder.Services.AddScoped<IQueryHandler<GetWorkoutByIdQuery, WorkoutDto?>, GetW
 builder.Services.AddScoped<ICommandHandler<AddWorkoutExerciseCommand, Guid>, AddWorkoutExerciseCommandHandler>();
 builder.Services.AddScoped<ICommandHandler<FinishWorkoutCommand, bool>, FinishWorkoutCommandHandler>();
 builder.Services.AddScoped<IQueryHandler<GetAllWorkoutsQuery, IReadOnlyList<WorkoutListItemDto>>, GetAllWorkoutsQueryHandler>();
+builder.Services.AddScoped<ICommandHandler<RemoveWorkoutExerciseCommand, bool>, RemoveWorkoutExerciseCommandHandler>();
 
 // Configure CORS policy to allow requests from the Angular frontend.
 builder.Services.AddCors(options =>

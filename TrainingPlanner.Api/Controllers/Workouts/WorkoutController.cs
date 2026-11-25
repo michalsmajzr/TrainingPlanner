@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Windows.Input;
 using TrainingPlanner.Application.Abstractions;
 using TrainingPlanner.Application.Workouts.Commands;
 using TrainingPlanner.Application.Workouts.Queries;
@@ -13,7 +14,8 @@ public sealed class WorkoutController(
     IQueryHandler<GetAllWorkoutsQuery, IReadOnlyList<WorkoutListItemDto>> getAllWorkoutsHandler,
     IQueryHandler<GetWorkoutByIdQuery, WorkoutDto?> getWorkoutByIdHandler,
     ICommandHandler<AddWorkoutExerciseCommand, Guid> addWorkoutExerciseHandler,
-    ICommandHandler<FinishWorkoutCommand, bool> finishWorkoutHandler)
+    ICommandHandler<FinishWorkoutCommand, bool> finishWorkoutHandler,
+    ICommandHandler<RemoveWorkoutExerciseCommand, bool> removeWorkoutExerciseHandler)
     : ApiControllerBase
 {
     // POST api/workout
@@ -127,6 +129,44 @@ public sealed class WorkoutController(
             {
                 "workout.not_found" => (StatusCodes.Status404NotFound, "Not Found"),
                 "workout.not_in_progress" => (StatusCodes.Status409Conflict, "Conflict"),
+                _ => (StatusCodes.Status400BadRequest, "Bad Request")
+            };
+
+            return ProblemResponse(
+                statusCode: statusCode,
+                errorCode: result.Error.Code,
+                detail: result.Error.Description,
+                title: title);
+        }
+
+        return NoContent();
+    }
+
+    // DELETE api/workout/{workoutId}/exercises/{workoutExerciseId}
+    [HttpDelete("{workoutId:guid}/exercises/{workoutExerciseId:guid}")]
+    public async Task<IActionResult> RemoveExercise(
+        Guid workoutId,
+        Guid workoutExerciseId,
+        CancellationToken cancellationToken)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return Unauthorized();
+        }
+
+        var command = new RemoveWorkoutExerciseCommand(workoutId, workoutExerciseId,userId);
+
+        var result = await removeWorkoutExerciseHandler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            var (statusCode, title) = result.Error.Code switch
+            {
+                "workout_exercise.not_found" => (StatusCodes.Status404NotFound, "Not Found"),
+
+                "workout.not_in_progress" => (StatusCodes.Status409Conflict, "Conflict"),
+
                 _ => (StatusCodes.Status400BadRequest, "Bad Request")
             };
 

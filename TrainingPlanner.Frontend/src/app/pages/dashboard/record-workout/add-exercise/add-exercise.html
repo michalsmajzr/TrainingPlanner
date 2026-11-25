@@ -34,9 +34,9 @@
     <div *ngIf="!isLoading() && !loadError()" class="grid gap-3">
       <button hlmCard type="button" (click)="addExercise(exercise.id)" [disabled]="isSaving() || !workoutId"
               *ngFor="let exercise of exercises()"
-              class="cursor-pointer p-4 text-left transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-wait disabled:opacity-50">
+              class="cursor-pointer p-4 text-left transition-colors hover:bg-muted dark:hover:bg-input/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
         <h2 class="text-md font-medium">
-          {{ exercise.name }}
+          {{exercise.isDefault ? (('EXERCISES.NAMES.' + exercise.name) | translate) : exercise.name}}
         </h2>
       </button>
     </div>

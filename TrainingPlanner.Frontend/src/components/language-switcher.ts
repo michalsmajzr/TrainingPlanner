@@ -18,7 +18,7 @@ interface Language {
       variant="outline"
       size="sm"
       [hlmDropdownMenuTrigger]="menu"
-      class="cursor-pointer hover:bg-accent px-2 py-1 rounded-xl"
+      class="cursor-pointer px-2 py-1 rounded-xl hover:!bg-muted hover:!text-foreground"
     >
       <span class="font-medium">{{ currentLang().flag }}</span>
     </button>
@@ -30,12 +30,15 @@ interface Language {
             <button
               hlmDropdownMenuItem
               (click)="selectLanguage(lang.code)"
-              [class.bg-accent]="currentLang().code === lang.code"
-              class="flex items-center justify-between cursor-pointer"
+              [class]="
+                currentLang().code === lang.code
+                  ? 'flex cursor-pointer items-center justify-between bg-primary text-primary-foreground [&_*]:!text-primary-foreground hover:!bg-primary hover:!brightness-90 focus:!bg-primary focus:!brightness-90'
+                  : 'flex cursor-pointer items-center justify-between hover:!bg-muted hover:!text-foreground focus:!bg-muted focus:!text-foreground'
+              "
             >
               <span>{{ lang.label }}</span>
               @if (currentLang().code === lang.code) {
-                <span class="text-xs text-muted-foreground">✓</span>
+                <span class="text-xs">✓</span>
               }
             </button>
           }

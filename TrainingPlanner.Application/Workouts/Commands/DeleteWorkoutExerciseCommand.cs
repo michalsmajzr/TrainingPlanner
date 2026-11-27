@@ -1,17 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TrainingPlanner.Application.Abstractions;
-using TrainingPlanner.Domain.Workouts.Enums;
 
 namespace TrainingPlanner.Application.Workouts.Commands;
 
-public sealed record RemoveWorkoutExerciseCommand(
+public sealed record DeleteWorkoutExerciseCommand(
     Guid WorkoutId,
     Guid WorkoutExerciseId,
     string UserId);
 
-public sealed class RemoveWorkoutExerciseCommandHandler(IApplicationDbContext dbContext) : ICommandHandler<RemoveWorkoutExerciseCommand, bool>
+public sealed class DeleteWorkoutExerciseCommandHandler(IApplicationDbContext dbContext) : ICommandHandler<DeleteWorkoutExerciseCommand, bool>
 {
-    public async Task<Result<bool>> Handle(RemoveWorkoutExerciseCommand command, CancellationToken cancellationToken)
+    public async Task<Result<bool>> Handle(DeleteWorkoutExerciseCommand command, CancellationToken cancellationToken)
     {
         var workoutExercise = await dbContext.WorkoutExercises
             .Include(x => x.Workout)

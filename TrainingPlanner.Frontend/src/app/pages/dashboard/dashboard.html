@@ -26,14 +26,18 @@
     {{ 'DASHBOARD.EMPTY' | translate }}
   </p>
 
-  <div class="grid gap-3">
-    <a hlmCard
-          *ngFor="let workout of workouts()"
-          class="cursor-pointer p-4 transition-colors hover:bg-muted dark:hover:bg-input/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          [routerLink]="['/record-workout']"
-          [queryParams]="{ workoutId: workout.id }"
-          [attr.aria-label]="('DASHBOARD.GO_TO' | translate) + ' ' + (workout.startedAt | date : 'dd.MM.yyyy HH:mm')">
-      <div>
+  <div class="flex flex-col gap-3">
+    <div *ngFor="let workout of workouts()"
+         class="relative">
+      <a hlmCard
+         class="block cursor-pointer p-4 pr-16 transition-colors hover:bg-muted dark:hover:bg-input/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+         [routerLink]="['/record-workout']"
+         [queryParams]="{ workoutId: workout.id }"
+         [attr.aria-label]="
+        ('DASHBOARD.GO_TO' | translate) +
+        ' ' +
+        (workout.startedAt | date : 'dd.MM.yyyy HH:mm')
+      ">
         <h2 class="text-lg font-medium">
           {{ workout.startedAt | date : 'dd.MM.yyyy' }}
         </h2>
@@ -42,7 +46,48 @@
           {{ workout.startedAt | date : 'HH:mm' }}
           {{ workout.exerciseCount }}
         </p>
-      </div>
-    </a>
+      </a>
+
+      <hlm-alert-dialog #deleteDialog="hlmAlertDialog"
+                        class="absolute right-4 top-1/2 -translate-y-1/2"
+                        [closeOnOutsidePointerEvents]="true">
+        <button hlmBtn
+                hlmAlertDialogTrigger
+                type="button"
+                variant="destructive"
+                size="icon"
+                [attr.aria-label]="'RECORD_WORKOUT.DELETE' | translate">
+          <ng-icon name="lucideX" />
+        </button>
+
+        <ng-template hlmAlertDialogPortal>
+          <hlm-alert-dialog-content>
+            <hlm-alert-dialog-header>
+              <h2 hlmAlertDialogTitle>
+                {{ 'WORKOUT.DELETE_TITLE' | translate }}
+              </h2>
+
+              <p hlmAlertDialogDescription>
+                {{ 'WORKOUT.DELETE_DESCRIPTION' | translate }}
+              </p>
+            </hlm-alert-dialog-header>
+
+            <hlm-alert-dialog-footer>
+              <button hlmAlertDialogCancel
+                      type="button">
+                {{ 'BUTTONS.CANCEL' | translate }}
+              </button>
+
+              <button hlmAlertDialogAction
+                      type="button"
+                      variant="destructive"
+                      (click)="deleteWorkout(workout.id); deleteDialog.close()">
+                {{ 'BUTTONS.DELETE' | translate }}
+              </button>
+            </hlm-alert-dialog-footer>
+          </hlm-alert-dialog-content>
+        </ng-template>
+      </hlm-alert-dialog>
+    </div>
   </div>
 </app-page-layout>

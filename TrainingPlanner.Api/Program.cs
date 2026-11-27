@@ -8,8 +8,6 @@ using TrainingPlanner.Application.Auth;
 using TrainingPlanner.Application.Auth.Commands;
 using TrainingPlanner.Application.Workouts.Commands;
 using TrainingPlanner.Application.Workouts.Queries;
-using TrainingPlanner.Domain.Workouts.Exercises;
-using TrainingPlanner.Domain.Workouts.Workouts;
 using TrainingPlanner.Infrastructure.Auth;
 using TrainingPlanner.Infrastructure.Identity;
 using TrainingPlanner.Infrastructure.Persistence;
@@ -91,7 +89,8 @@ builder.Services.AddScoped<IQueryHandler<GetWorkoutByIdQuery, WorkoutDto?>, GetW
 builder.Services.AddScoped<ICommandHandler<AddWorkoutExerciseCommand, Guid>, AddWorkoutExerciseCommandHandler>();
 builder.Services.AddScoped<ICommandHandler<FinishWorkoutCommand, bool>, FinishWorkoutCommandHandler>();
 builder.Services.AddScoped<IQueryHandler<GetAllWorkoutsQuery, IReadOnlyList<WorkoutListItemDto>>, GetAllWorkoutsQueryHandler>();
-builder.Services.AddScoped<ICommandHandler<RemoveWorkoutExerciseCommand, bool>, RemoveWorkoutExerciseCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<DeleteWorkoutCommand, bool>, DeleteWorkoutCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<DeleteWorkoutExerciseCommand, bool>, DeleteWorkoutExerciseCommandHandler>();
 
 // Configure CORS policy to allow requests from the Angular frontend.
 builder.Services.AddCors(options =>

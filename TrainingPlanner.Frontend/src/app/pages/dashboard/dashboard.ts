@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { RouterLink } from '@angular/router';
-import { finalize, switchMap } from 'rxjs';
+import { finalize } from 'rxjs';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { HlmAlertDialogImports } from '@spartan-ng/helm/alert-dialog';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
@@ -11,6 +11,9 @@ import { LanguageSwitcherComponent } from '@components/language-switcher';
 import { PageLayoutComponent } from '@components/page-layout/page-layout';
 import { PageHeaderComponent } from '@components/page-header/page-header';
 import { ThemeSwitcherComponent } from '@components/theme-switcher';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+import { toast } from '@spartan-ng/brain/sonner';
 
 type WorkoutListItem = {
   id: string;
@@ -39,7 +42,11 @@ type ApiErrorResponse = {
     LanguageSwitcherComponent,
     PageLayoutComponent,
     PageHeaderComponent,
-    ThemeSwitcherComponent
+    ThemeSwitcherComponent,
+    NgIcon
+  ],
+  providers: [
+    provideIcons({ lucideX })
   ],
   templateUrl: './dashboard.html',
 })
@@ -71,6 +78,21 @@ export class DashboardPage implements OnInit {
           const message = this.getErrorMessage(error, 'ERRORS.WORKOUTS.LOAD_FAILED');
           this.loadError.set(message);
           console.error(error);
+        },
+      });
+  }
+
+  deleteWorkout(workoutId: string): void {
+    this.http.delete<void>('/api/workout/' + encodeURIComponent(workoutId))
+      .subscribe({
+        next: () => {
+          this.workouts.update(workouts => workouts.filter(workout => workout.id !== workoutId));
+          toast.success(this.translate.instant('WORKOUTS.DELETE_SUCCESS'));
+        },
+        error: (error: HttpErrorResponse) => {
+          toast.error(
+            this.getErrorMessage(error, 'ERRORS.WORKOUTS.DELETE_FAILED'),
+          );
         },
       });
   }

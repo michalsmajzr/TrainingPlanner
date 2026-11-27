@@ -17,6 +17,11 @@
     "EMPTY": "Zatím nemáte žádné tréninkové programy.",
     "GO_TO": "Přejít na trénink"
   },
+  "WORKOUT": {
+    "DELETE": "Smazat trénink",
+    "DELETE_TITLE": "Smazat trénink?",
+    "DELETE_DESCRIPTION": "Trénink a všechny jeho záznamy budou trvale odstraněny. Tuto akci nelze vrátit zpět."
+  },
   "WORKOUTS": {
     "DELETE_SUCCESS": "Tréninkový program byl úspěšně smazán.",
     "LOADING_DETAIL": "Načítám trénink...",
@@ -117,7 +122,7 @@
       "NOT_FOUND": "Tréninkový program nebyl nalezen.",
       "DETAIL_LOAD_FAILED": "Tréninkový program se nepodařilo načíst. Zkuste to prosím znovu.",
       "LOAD_FAILED": "Tréninkové programy se nepodařilo načíst. Zkuste to prosím znovu.",
-      "DELETE_FAILED": "Tréninkový program se nepodařilo smazat. Zkuste to prosím znovu."
+      "DELETE_FAILED": "Tréninkový program se nepodařilo smazat."
     },
     "EXERCISES": {
       "NOT_FOUND": "Cvik nebyl nalezen.",

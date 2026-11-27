@@ -17,6 +17,11 @@
     "EMPTY": "You don't have any training yet.",
     "GO_TO": "Go to training"
   },
+  "WORKOUT": {
+    "DELETE": "Delete workout",
+    "DELETE_TITLE": "Delete workout?",
+    "DELETE_DESCRIPTION": "The workout and all its records will be permanently deleted. This action cannot be undone."
+  },
   "WORKOUTS": {
     "DELETE_SUCCESS": "Training deleted successfully.",
     "LOADING_DETAIL": "Loading training...",

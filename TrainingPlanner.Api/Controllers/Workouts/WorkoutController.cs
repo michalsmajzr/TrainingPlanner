@@ -15,7 +15,8 @@ public sealed class WorkoutController(
     IQueryHandler<GetWorkoutByIdQuery, WorkoutDto?> getWorkoutByIdHandler,
     ICommandHandler<AddWorkoutExerciseCommand, Guid> addWorkoutExerciseHandler,
     ICommandHandler<FinishWorkoutCommand, bool> finishWorkoutHandler,
-    ICommandHandler<RemoveWorkoutExerciseCommand, bool> removeWorkoutExerciseHandler)
+    ICommandHandler<DeleteWorkoutCommand, bool> deleteWorkoutHandler,
+    ICommandHandler<DeleteWorkoutExerciseCommand, bool> deleteWorkoutExerciseHandler)
     : ApiControllerBase
 {
     // POST api/workout
@@ -142,9 +143,44 @@ public sealed class WorkoutController(
         return NoContent();
     }
 
+    // DELETE api/workout/{workoutId}
+    [HttpDelete("{workoutId:guid}")]
+    public async Task<IActionResult> DeleteWorkout(
+        Guid workoutId,
+        CancellationToken cancellationToken)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            return Unauthorized();
+        }
+
+        var command = new DeleteWorkoutCommand(workoutId, userId);
+
+        var result = await deleteWorkoutHandler.Handle(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            var (statusCode, title) = result.Error.Code switch
+            {
+                "workout.not_found" => (StatusCodes.Status404NotFound, "Not Found"),
+
+                _ => (StatusCodes.Status400BadRequest, "Bad Request")
+            };
+
+            return ProblemResponse(
+                statusCode: statusCode,
+                errorCode: result.Error.Code,
+                detail: result.Error.Description,
+                title: title);
+        }
+
+        return NoContent();
+    }
+
     // DELETE api/workout/{workoutId}/exercises/{workoutExerciseId}
     [HttpDelete("{workoutId:guid}/exercises/{workoutExerciseId:guid}")]
-    public async Task<IActionResult> RemoveExercise(
+    public async Task<IActionResult> DeleteWorkoutExercise(
         Guid workoutId,
         Guid workoutExerciseId,
         CancellationToken cancellationToken)
@@ -155,17 +191,15 @@ public sealed class WorkoutController(
             return Unauthorized();
         }
 
-        var command = new RemoveWorkoutExerciseCommand(workoutId, workoutExerciseId,userId);
+        var command = new DeleteWorkoutExerciseCommand(workoutId, workoutExerciseId,userId);
 
-        var result = await removeWorkoutExerciseHandler.Handle(command, cancellationToken);
+        var result = await deleteWorkoutExerciseHandler.Handle(command, cancellationToken);
 
         if (result.IsFailure)
         {
             var (statusCode, title) = result.Error.Code switch
             {
                 "workout_exercise.not_found" => (StatusCodes.Status404NotFound, "Not Found"),
-
-                "workout.not_in_progress" => (StatusCodes.Status409Conflict, "Conflict"),
 
                 _ => (StatusCodes.Status400BadRequest, "Bad Request")
             };
